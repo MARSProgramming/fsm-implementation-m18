@@ -69,6 +69,8 @@ public interface SwerveIO extends SubsystemDataProcessor.IODataRefresher {
 
     default void resetRotation() {}
 
+    default void getEstimatedPosition() {}
+
     default void resetToParamaterizedRotation(Rotation2d rotation2d) {}
 
     default void updateSimState() {}

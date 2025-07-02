@@ -17,7 +17,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.Robot;
@@ -26,7 +25,7 @@ import frc.robot.constants.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SwerveIOCTRE extends SwerveDrivetrain implements SwerveIO {
+public class SwerveIOCTRE extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements SwerveIO {
 
     HashMap<String, BaseStatusSignal> frontLeftSignals = new HashMap<>();
     HashMap<String, BaseStatusSignal> frontRightSignals = new HashMap<>();
@@ -74,7 +73,6 @@ public class SwerveIOCTRE extends SwerveDrivetrain implements SwerveIO {
             Pose2d.kZero);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void registerTelemetryFunction(SwerveIOInputs inputs) {
         this.registerTelemetry(state -> {
@@ -98,8 +96,10 @@ public class SwerveIOCTRE extends SwerveDrivetrain implements SwerveIO {
             Pose2d visionRobotPoseMeters,
             double timestampSeconds,
             Matrix<N3, N1> visionMeasurementStdDevs) {
-        estimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+        this.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
     }
+
+    
 
 
     @Override
