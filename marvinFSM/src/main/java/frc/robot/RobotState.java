@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import frc.robot.util.CameraConfig;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Field;
 
