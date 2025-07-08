@@ -1,5 +1,7 @@
 package frc.robot.subsystems.elevator;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -58,7 +60,31 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     // leave room for periodic here
+    @Override
+    public void periodic() {
+        synchronized (elevatorInputs) {
+            synchronized (limiterInputs) {
+                Logger.processInputs("Subsystems/Elevator/Main", elevatorInputs);
+                Logger.processInputs("Subystems/Elevator/DIOandRIO", elevatorInputs);
 
+                systemState = handleStateTransition();
+                Logger.recordOutput("Subsystems/Elevator/WantedState", wantedState);
+                Logger.recordOutput("Subsystems/Elevator/SystemState", systemState);
+
+                double wantedElevatorSetpoint;
+                double wantedElevatorVoltage;
+
+                wantedElevatorSetpoint = this.elevatorSetpoint;
+                wantedElevatorVoltage = this.elevatorVoltageSetpoint;
+
+                Logger.recordOutput("Subsystems/Elevator/DesiredSetpoint", wantedElevatorSetpoint);
+                Logger.recordOutput("Subsystems/Elevator/DesiredVoltage", wantedElevatorVoltage);
+
+                applyStates();
+                previousWantedState = this.wantedState;
+            }
+        }
+    }
     private SystemState handleStateTransition() {
         if (!isElevatorHomed && wantedState != WantedState.HOME) {
             return SystemState.IDLING;
@@ -129,7 +155,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                 if (DriverStation.isAutonomous() && !DriverStation.isDisabled()) {
                     elevatorIO.applyVoltage(-6); // replace with a constant later
                 } else {
-                    elevatorIO.applyVoltage(-5); // replace with a constant later
+                    elevatorIO.applyVoltage(elevatorVoltageSetpoint); // replace with a constant later
                 }
                 break;
             }
@@ -202,17 +228,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.elevatorVoltageSetpoint = voltage;
     }
 
-    public void setDesiredElevatorVoltageForClimbing(double voltage) {
-        setWantedState(WantedState.CLIMB);
-        this.elevatorVoltageSetpoint = voltage;
-    }
-
     public boolean hasHomeCompleted() {
         return isElevatorHomed;
     }
-
-
-
-
 
 }
