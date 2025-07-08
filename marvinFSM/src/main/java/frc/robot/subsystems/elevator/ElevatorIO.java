@@ -23,11 +23,15 @@ public interface ElevatorIO extends SubsystemDataProcessor.IODataRefresher {
         
     }
 
+    default void updateInputs(ElevatorIOInputs inputs) {}
+
     default void setTargetPosition(double pos) {}
 
     default void stop() {}
 
     default void resetPosition() {}
+
+    default void climb() {}
 
     default void setNeutralMode(NeutralModeValue neturalMode) {}
 

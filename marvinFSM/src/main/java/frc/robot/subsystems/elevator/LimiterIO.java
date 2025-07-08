@@ -16,6 +16,8 @@ public interface LimiterIO extends SubsystemDataProcessor.IODataRefresher {
 
     default void targetServoPosition(double position) {}
 
+    default void updateInputs(LimiterIOInputs inputs) {}
+
     @Override
     default void refreshData() {}
 }

@@ -19,6 +19,15 @@ public class SubsystemDataProcessor implements Runnable {
     }
 
     public static void createAndStartSubsystemDataProcessor(
+        DataReaderAndLogger dataReaderAndLogger,
+        IODataRefresher IODataRefresher1,
+        IODataRefresher IODataRefresher2) {
+    new Thread(new SubsystemDataProcessor(
+                    dataReaderAndLogger, IODataRefresher1, IODataRefresher2))
+            .start();
+}
+
+    public static void createAndStartSubsystemDataProcessor(
             DataReaderAndLogger dataReaderAndLogger,
             IODataRefresher IODataRefresher1,
             IODataRefresher IODataRefresher2,
@@ -36,6 +45,14 @@ public class SubsystemDataProcessor implements Runnable {
         this.dataReaderAndLogger = dataReaderAndLogger;
         IODataRefreshers = List.of(IODataRefresher);
     }
+
+    public SubsystemDataProcessor(
+        DataReaderAndLogger dataReaderAndLogger,
+        IODataRefresher IODataRefresher1,
+        IODataRefresher IODataRefresher2) {
+    this.dataReaderAndLogger = dataReaderAndLogger;
+    IODataRefreshers = List.of(IODataRefresher1, IODataRefresher2);
+}
 
     public SubsystemDataProcessor(
             DataReaderAndLogger dataReaderAndLogger,
