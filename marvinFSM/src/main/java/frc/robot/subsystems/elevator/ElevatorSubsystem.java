@@ -1,15 +1,10 @@
 package frc.robot.subsystems.elevator;
 
 import org.littletonrobotics.junction.Logger;
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
 import frc.robot.util.SubsystemDataProcessor;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -123,7 +118,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                             return SystemState.IDLING;
                         }
                     } else {
-                        return SystemState.HOMING;
+                        return SystemState.IDLING;
                     }
                 }
             }
