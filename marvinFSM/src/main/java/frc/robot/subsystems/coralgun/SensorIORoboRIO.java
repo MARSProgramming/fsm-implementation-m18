@@ -13,20 +13,24 @@ public class SensorIORoboRIO implements SensorIO {
         ir.setOversampleBits(4);
     }
 
+    private int integ = 0;
+
     @Override
     public void updateInputs(SensorIOInputs inputs) {
-        int integ = 0;
         inputs.sensorAverageVoltage = ir.getAverageVoltage();
         if (ir.getAverageValue() > Constants.IntakeConstants.CoralGunConstants.IR_SENSOR_THRESHOLD) {
-             integ++;
-            } else {
-             integ = 0;
-            }
-            if (integ >= 5) {
-                inputs.sensorTripped = true;
-            }  else {
-                inputs.sensorTripped = false;
-            }
-         }
+            integ++;
+        } else {
+            integ = 0;
+        }
+        if (integ >= 5) {
+            inputs.sensorTripped = true;
+        } else {
+            inputs.sensorTripped = false;
+        }
     }
+
+    @Override
+    public void refreshData() {}
+}
 
