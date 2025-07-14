@@ -20,7 +20,7 @@ public class LimiterIORoboRIO implements LimiterIO {
 
     @Override
     public void targetServoPosition(double position) {
-        climbServo.setPosition(position);
+        climbServo.set(position);
     }
 
     @Override

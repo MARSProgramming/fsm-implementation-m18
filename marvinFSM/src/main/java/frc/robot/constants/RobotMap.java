@@ -57,5 +57,9 @@ public class RobotMap {
               Units.Inches.of(13.44),
               new Rotation3d(Units.Degrees.of(-10), Units.Degrees.of(0), Units.Degrees.of(90)));
     }
+
+    public class RIO {
+      public static final int IR = 1;
+    }
   
 }

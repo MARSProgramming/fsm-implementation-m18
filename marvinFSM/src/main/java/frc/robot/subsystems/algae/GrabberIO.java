@@ -1,19 +1,19 @@
-package frc.robot.subsystems.coralgun;
+package frc.robot.subsystems.algae;
 
 import org.littletonrobotics.junction.AutoLog;
 
 import frc.robot.util.SubsystemDataProcessor;
 
-public interface SpitterIO extends SubsystemDataProcessor.IODataRefresher {
+public interface GrabberIO extends SubsystemDataProcessor.IODataRefresher {
     @AutoLog
-    class SpitterIOInputs {
+    class GrabberIOInputs {
         public double motorOutputPercent;
-        public double motorStatorCurrent;
+        public double motorBusVoltage;
         public double motorTemperature;
 
     }
 
-    default void updateInputs(SpitterIOInputs inputs) {}
+    default void updateInputs(GrabberIOInputs inputs) {}
 
     default void run(double speed) {}
     

@@ -29,6 +29,8 @@ public interface ElevatorIO extends SubsystemDataProcessor.IODataRefresher {
 
     default void stop() {}
 
+    default void applyVoltage(double out) {}
+
     default void resetPosition() {}
 
     default void climb() {}

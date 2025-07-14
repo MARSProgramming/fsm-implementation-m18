@@ -1,13 +1,12 @@
-package frc.robot.subsystems.coralgun;
-
-import java.nio.channels.ScatteringByteChannel;
-
+package frc.robot.subsystems.coral;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.coral.SensorIOInputsAutoLogged;
+import frc.robot.subsystems.coral.SpitterIOInputsAutoLogged;
 import frc.robot.util.SubsystemDataProcessor;
 
-public class CoralgunSubsystem extends SubsystemBase {
+public class CoralSubsystem extends SubsystemBase {
     private final SpitterIO spitterIO;
     private final SensorIO sensorIO;
 
@@ -35,7 +34,7 @@ public class CoralgunSubsystem extends SubsystemBase {
     private WantedState wantedState = WantedState.IDLE;
     private SystemState systemState = SystemState.IDLING;
 
-    public CoralgunSubsystem(SpitterIO spitIO, SensorIO sensIO) {
+    public CoralSubsystem(SpitterIO spitIO, SensorIO sensIO) {
         spitterIO = spitIO;
         sensorIO = sensIO;
 

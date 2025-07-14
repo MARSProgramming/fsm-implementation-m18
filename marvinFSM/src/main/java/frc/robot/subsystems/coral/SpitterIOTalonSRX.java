@@ -1,4 +1,4 @@
-package frc.robot.subsystems.coralgun;
+package frc.robot.subsystems.coral;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;

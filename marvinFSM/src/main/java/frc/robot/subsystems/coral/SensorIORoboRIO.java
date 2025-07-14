@@ -1,4 +1,4 @@
-package frc.robot.subsystems.coralgun;
+package frc.robot.subsystems.coral;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import frc.robot.constants.Constants;
