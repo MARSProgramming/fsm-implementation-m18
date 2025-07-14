@@ -318,22 +318,9 @@ public final class Constants {
             public static final double EJECTING_TOP_CORAL_VOLTAGE_HORIZONTAL_L1 = -5.0;
         }
 
-        public static final class HoldingVoltages {
-            public static final double HOLDING_VERTICAL_CORAL_VOLTAGE = 0.0;
-            public static final double HOLDING_TOP_CORAL_VOLTAGE = 0.0;
-            public static final double HOLDING_TOP_ALGAE_VOLTAGE = -12.0;
-            public static final double HOLDING_TOP_ALGAE_HARDER_VOLTAGE = -12.0;
-
-            public static final double HOLDING_VERTICAL_ALGAE_VOLTAGE = 0.0;
-        }
-
-        public static final class IndexingVoltages {
-            public static final double INDEXING_CORAL_FORWARD_TOP_VOLTAGE = 0.0;
-            public static final double INDEXING_CORAL_FORWARD_VERTICAL_VOLTAGE = -1.0;
-            public static final double INDEXING_CORAL_BACKWARD_TOP_VOLTAGE = 0.0;
-            public static final double INDEXING_CORAL_BACKWARD_VERTICAL_VOLTAGE = 1.5;
-            public static final double INDEXING_CORAL_RIGHT_RIGHT_VERTICAL_VOLTAGE = -7.0;
-            public static final double INDEXING_CORAL_LEFT_LEFT_VERTICAL_VOLTAGE = -7.0;
+        public static final class CoralGunConstants {
+            public static final double HOLDING_CORAL_PASSIVE_PERCENT = -0.2;
+            public static final double IR_SENSOR_THRESHOLD = 1.8;
         }
 
         public static final double TOP_ROLLER_CURRENT_THRESHOLD_FOR_ALGAE_DETECTION = 9.0;
