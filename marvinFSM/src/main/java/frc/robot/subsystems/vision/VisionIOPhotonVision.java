@@ -70,7 +70,9 @@ public class VisionIOPhotonVision implements VisionIO {
                 robotPose, // 3D pose estimate
                 multitagResult.estimatedPose.ambiguity, // Ambiguity
                 multitagResult.fiducialIDsUsed.size(), // Tag count
+                -1,
                 totalTagDistance / result.targets.size(), // Average tag distance
+                this.camera.getName(),
                 PoseObservationType.PHOTONVISION)); // Observation type
 
       } else if (!result.targets.isEmpty()) { // Single tag result
@@ -96,7 +98,9 @@ public class VisionIOPhotonVision implements VisionIO {
                   robotPose, // 3D pose estimate
                   target.poseAmbiguity, // Ambiguity
                   1, // Tag count
+                  target.fiducialId,
                   cameraToTarget.getTranslation().getNorm(), // Average tag distance
+                  this.camera.getName(),
                   PoseObservationType.PHOTONVISION)); // Observation type
         }
       }

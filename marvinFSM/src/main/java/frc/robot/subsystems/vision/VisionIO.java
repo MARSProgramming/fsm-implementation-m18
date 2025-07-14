@@ -30,7 +30,9 @@ public interface VisionIO {
       Pose3d pose,
       double ambiguity,
       int tagCount,
+      int tagId,
       double averageTagDistance,
+      String cameraName,
       PoseObservationType type) {}
 
   public static enum PoseObservationType {

@@ -19,19 +19,20 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotState;
 import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
 public class VisionSubsystem extends SubsystemBase {
-  private final VisionConsumer consumer;
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
   private final Alert[] disconnectedAlerts;
 
-  public VisionSubsystem(VisionConsumer consumer, VisionIO... io) {
-    this.consumer = consumer;
+  public VisionSubsystem(VisionIO... io) {
     this.io = io;
 
     // Initialize inputs
@@ -60,6 +61,7 @@ public class VisionSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    List<RobotState.AprilTagObservation> aprilTagObservations = new ArrayList<>();
     for (int i = 0; i < io.length; i++) {
       io[i].updateInputs(inputs[i]);
       Logger.processInputs("Vision/Camera" + Integer.toString(i), inputs[i]);
@@ -117,24 +119,17 @@ public class VisionSubsystem extends SubsystemBase {
         // Skip if rejected
         if (rejectPose) {
           continue;
+        } else {
+          aprilTagObservations.add(new RobotState.AprilTagObservation(
+            observation.cameraName(),
+            observation.tagId(),
+            observation.pose().toPose2d()
+          ));
         }
-
-        // Calculate standard deviations
-        double stdDevFactor =
-            Math.pow(observation.averageTagDistance(), 2.0) / observation.tagCount();
-        double linearStdDev = linearStdDevBaseline * stdDevFactor;
-        double angularStdDev = angularStdDevBaseline * stdDevFactor;
-        if (cameraIndex < cameraStdDevFactors.length) {
-          linearStdDev *= cameraStdDevFactors[cameraIndex];
-          angularStdDev *= cameraStdDevFactors[cameraIndex];
-        }
-
-        // Send vision observation
-        consumer.accept(
-            observation.pose().toPose2d(),
-            observation.timestamp(),
-            VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
       }
+      
+      RobotState.getInstance().addVisionObservation(aprilTagObservations.toArray(new RobotState.AprilTagObservation[0]));
+
 
       // Log camera datadata
       Logger.recordOutput(
@@ -166,13 +161,5 @@ public class VisionSubsystem extends SubsystemBase {
     Logger.recordOutput(
         "Vision/Summary/RobotPosesRejected",
         allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
-  }
-
-  @FunctionalInterface
-  public static interface VisionConsumer {
-    public void accept(
-        Pose2d visionRobotPoseMeters,
-        double timestampSeconds,
-        Matrix<N3, N1> visionMeasurementStdDevs);
   }
 }
