@@ -115,4 +115,8 @@ public class CoralSubsystem extends SubsystemBase {
              
         }
     }
+
+    public void setWantedState(WantedState wantedState) {
+        this.wantedState = wantedState;
+    }
 }

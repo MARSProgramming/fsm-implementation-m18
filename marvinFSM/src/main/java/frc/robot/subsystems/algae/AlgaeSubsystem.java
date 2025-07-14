@@ -87,4 +87,8 @@ public class AlgaeSubsystem extends SubsystemBase {
             }
         }
     }
+
+    public void setWantedState(WantedState wantedState) {
+        this.wantedState = wantedState;
+    }
 }
