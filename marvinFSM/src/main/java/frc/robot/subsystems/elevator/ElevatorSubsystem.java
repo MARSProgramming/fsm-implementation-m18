@@ -89,14 +89,14 @@ public class ElevatorSubsystem extends SubsystemBase {
             case HOME -> {
                 if (previousWantedState != WantedState.HOME) {
                     isElevatorHomed = false;
-                    return SystemState.HOMING;
                 }
+                
                 if (!DriverStation.isDisabled()) {
                     if (DriverStation.isAutonomous()) {
                         if (Math.abs(elevatorInputs.elevAppliedVolts) <= 6) {
                             return SystemState.HOMING;
                         }
-                        if (limiterInputs.limit == true) {
+                        if (limiterInputs.limit == true && elevatorInputs.elevPosition < 0.05) {
                             isElevatorHomed = true;
                             elevatorIO.resetPosition();
 
@@ -110,7 +110,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                             return SystemState.HOMING;
                         }
 
-                        if (limiterInputs.limit == true) {
+                        if (limiterInputs.limit == true && elevatorInputs.elevPosition < 0.05) {
                             isElevatorHomed = true;
                             elevatorIO.resetPosition();
 
