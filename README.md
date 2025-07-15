@@ -1,5 +1,5 @@
 # Finite State Machine Implementation of Marvin 18
-This is an offseason project structured around the development Finite State Machine (FSM) architecture to manage complex robot behaviors in a structured and reliable way. Its intent is to use Marvin 18, a relatively simple robot, as a testbed for creating an FSM and improve our understanding of the model before the next FRC season.
+This is an offseason project structured around the development of a Finite State Machine (FSM) architecture to manage complex robot behaviors in a structured and reliable way. Its intent is to use Marvin 18, a relatively simple robot, as a testbed for creating an FSM and improve our understanding of the model before the next FRC season.
 
 This effort is intended to improve the robot’s autonomy, response time, and task execution consistency by organizing actions into well-defined states and transitions. By clearly separating robot logic into manageable states (such as intake, alignment, scoring, and idle), the FSM allows for more maintainable and testable code while reducing the chances of unexpected behavior or “getting stuck” between commands. It intends to minimize delay and maximize computational efficiency of methods executed on the robot.
 
