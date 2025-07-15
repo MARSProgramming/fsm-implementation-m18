@@ -13,7 +13,6 @@ public class CoralSubsystem extends SubsystemBase {
     private final SensorIOInputsAutoLogged sensorInputs = new SensorIOInputsAutoLogged();
     private final SpitterIOInputsAutoLogged spitterInputs = new SpitterIOInputsAutoLogged();
 
-    public boolean hasCoral = false;
 
     public enum WantedState {
         IDLE,
@@ -57,7 +56,6 @@ public class CoralSubsystem extends SubsystemBase {
                 Logger.processInputs("Subsystems/Coralgun/Sensor", sensorInputs);
 
                 systemState = handleStateTransition();
-                hasCoral = sensorInputs.sensorTripped;
                 Logger.recordOutput("Subsystems/Coralgun/WantedState", wantedState);
                 Logger.recordOutput("Subsystems/Coralgun/SystemState", systemState);
 
@@ -118,5 +116,11 @@ public class CoralSubsystem extends SubsystemBase {
 
     public void setWantedState(WantedState wantedState) {
         this.wantedState = wantedState;
+    }
+
+    public boolean hasCoral() {
+        synchronized (sensorInputs) {
+            return sensorInputs.sensorTripped;
+        }
     }
 }

@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.Constants;
@@ -110,6 +112,80 @@ public class Superstructure extends SubsystemBase {
         ledSubsystem = led;
         operatorDashboard = dash;
     }
+
+
+
+    // state machine methods. the following methods are designed to handle all state machine logic.
+
+    private void home() {
+        ledSubsystem.setWantedAction(LEDSubsystem.WantedState.DISPLAY_ROBOT_ZERO_ACTION);
+
+        if (elevatorSubsystem.hasHomeCompleted() && previousSuperState == CurrentSuperState.HOME) {
+            elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.IDLE);
+        } else {
+            elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.HOME);
+        }
+
+        if (elevatorSubsystem.hasHomeCompleted() && previousSuperState == currentSuperState.HOME) {
+            setWantedSuperState(WantedSuperState.DEFAULT_STATE);
+        }
+     }
+
+     private void stopped() {
+        elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.IDLE);
+        coralSubsystem.setWantedState(CoralSubsystem.WantedState.IDLE);
+        algaeSubsystem.setWantedState(AlgaeSubsystem.WantedState.IDLE);
+        ledSubsystem.setWantedAction(elevatorSubsystem.hasHomeCompleted() ? LEDSubsystem.WantedState.DISPLAY_ROBOT_ELEVATOR_ZEROED : LEDSubsystem.WantedState.DISPLAY_ROBOT_ELEVATOR_NOT_ZEROED);
+     }
+
+     private void holdingAlgae() {
+        hasDriveToPointSetPointBeenSet = false;
+        elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_ALGAE_TEE);
+        elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.MOVE_TO_POSITION);
+
+        swerveSubsystem.setWantedState(SwerveSubsystem.WantedState.TELEOP_DRIVE);
+        swerveSubsystem.setTeleopVelocityCoefficient(1.0);
+        swerveSubsystem.setRotationVelocityCoefficient(1.0);
+
+        ledSubsystem.setWantedAction(LEDSubsystem.WantedState.DISPLAY_HOLDING_ALGAE);
+        
+        algaeSubsystem.setWantedState(AlgaeSubsystem.WantedState.HOLD);
+     }
+
+     private void holdingCoral() {
+        hasDriveToPointSetPointBeenSet = false;
+
+        elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L1);
+        elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.MOVE_TO_POSITION);
+
+        coralSubsystem.setWantedState(CoralSubsystem.WantedState.PASSIVE_INTAKE);
+
+        swerveSubsystem.setWantedState(SwerveSubsystem.WantedState.TELEOP_DRIVE);
+        swerveSubsystem.setTeleopVelocityCoefficient(1.0);
+        swerveSubsystem.setRotationVelocityCoefficient(1.0);
+     }
+
+
+
+     // Superstructure methods.
+
+     public void setWantedSuperState(WantedSuperState superState) {
+        this.wantedSuperState = superState;
+     }
+
+     public Command setStateCommand(WantedSuperState superState) {
+        return setStateCommand(superState);
+     }
+
+     public Command setStateCommandWithServoCheck(WantedSuperState superState, boolean servo) {
+        Command commandToReturn = new InstantCommand(() -> setWantedSuperState(superState));
+        // may need logic here that checks the servo position before running the command
+        return commandToReturn;
+     }
+
+     public boolean hasCoral() {
+        return coralSubsystem.hasCoral();
+     }
 
     
 }

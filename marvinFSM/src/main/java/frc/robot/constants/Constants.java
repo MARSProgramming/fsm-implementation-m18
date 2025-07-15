@@ -197,6 +197,23 @@ public final class Constants {
                 ReefFaces.KL, 19);
     }
 
+    public static final class ElevatorConstants {
+            public static double ELEVATOR_MAX = 8.3;
+            public static  double ELEVATOR_L4 = 8.25;
+            public static double ELEVATOR_L3 = 4.5;
+            public static double ELEVATOR_L2 = 2.08;
+            public static double ELEVATOR_L1 = 0;
+            public static double ELEVATOR_ALGAE_TOP = 7.7;
+            public static double ELEVATOR_ALGAE_BOT = 4.9;
+            public static double ELEVATOR_ALGAE_TEE = 2.2;
+            public static double ELEVATOR_ALGAE_GROUND = 0.72;
+            public static double ELEVATOR_CLIMB = 0;
+            public static double ELEVATOR_CLIMBING_VOLTAGE = -5;
+            public static double ELEVATOR_ZEROING_VOLTAGE = -6;
+
+            public static double ELEVATOR_TEST_POSITION = 1;            
+    }
+
   
     public static final class IntakeConstants {
         public static final class CollectingVoltages {}
