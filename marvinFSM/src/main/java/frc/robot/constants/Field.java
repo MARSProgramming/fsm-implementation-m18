@@ -206,9 +206,9 @@ public class Field {
           //  yOffset = Units.inchesToMeters(yOffset + Units.metersToInches(distanceFromFinalScoringPose));
 
 
-            if (scoringSide == Constants.SuperstructureConstants.ScoringSide.RIGHT) {
-                yOffset *= -1; // this needs to be provided, not inverted, the distances are Not the same
-            }
+          //  if (scoringSide == Constants.SuperstructureConstants.ScoringSide.RIGHT) {
+          //      yOffset *= -1; // this needs to be provided, not inverted, the distances are Not the same
+         //   }
             Translation2d offsetFromTag = new Translation2d(xOffset, yOffset);
 
             var transformedPose =

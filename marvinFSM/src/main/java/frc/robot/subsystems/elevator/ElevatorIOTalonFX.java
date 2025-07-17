@@ -36,8 +36,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     private final StatusSignal<Temperature> elevTwoMotorTemp;
 
     public ElevatorIOTalonFX() {
-        master = new TalonFX(RobotMap.CAN.ELEVATOR_MASTER);
-        follower = new TalonFX(RobotMap.CAN.ELEVATOR_FOLLOWER);
+        master = new TalonFX(RobotMap.CAN.ELEVATOR_MASTER, "CAN-2");
+        follower = new TalonFX(RobotMap.CAN.ELEVATOR_FOLLOWER, "CAN-2");
         var masterConfig = new TalonFXConfiguration();
         
         masterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
