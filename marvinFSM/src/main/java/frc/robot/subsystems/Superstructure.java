@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.security.AllPermission;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
@@ -54,13 +55,8 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
         HOME,
         STOPPED,
         DEFAULT_STATE,
-        FORCE_RELOCALIZE_LEFT,
-        FORCE_RELOCALIZE_RIGHT,
+        FORCE_RELOCALIZE,
         SCORE_L1_MANUAL_ALIGN,
-        SCORE_L1_LEFT_BASE,
-        SCORE_L1_RIGHT_BASE,
-        SCORE_L1_LEFT_TOP,
-        SCORE_L1_RIGHT_TOP,
         SCORE_LEFT_L2,
         SCORE_LEFT_L3,
         SCORE_LEFT_L4,
@@ -73,6 +69,8 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
         MANUAL_L1,
         INTAKE_ALGAE_FROM_REEF_TOP,
         INTAKE_ALGAE_FROM_REEF_BOT,
+        INTAKE_ALGAE_FROM_REEF_GROUND,
+        INTAKE_CORAL_FROM_STATION,
         MOVE_ALGAE_TO_PROCESSOR_POSITION,
         SCORE_ALGAE_IN_PROCESSOR,
         CLIMB
@@ -85,8 +83,7 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
         NO_PIECE_AUTO,
         HOLDING_CORAL_AUTO,
         HOLDING_ALGAE,
-        FORCE_RELOCALIZE_LEFT,
-        FORCE_RELOCALIZE_RIGHT,
+        FORCE_RELOCALIZE,
         SCORE_TELEOP_L1_MANUAL_ALIGNMENT,
         SCORE_LEFT_TELEOP_L2,
         SCORE_LEFT_TELEOP_L3,
@@ -94,7 +91,6 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
         SCORE_RIGHT_TELEOP_L2,
         SCORE_RIGHT_TELEOP_L3,
         SCORE_RIGHT_TELEOP_L4,
-        SCORE_AUTO_L1,
         SCORE_LEFT_AUTO_L2,
         SCORE_LEFT_AUTO_L3,
         SCORE_LEFT_AUTO_L4,
@@ -105,9 +101,10 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
         MANUAL_L3,
         MANUAL_L2,
         MANUAL_L1,
-        INTAKE_ALGAE_FROM_HP,
         INTAKE_ALGAE_FROM_REEF_TOP,
         INTAKE_ALGAE_FROM_REEF_BOT,
+        INTAKE_ALGAE_FROM_REEF_GROUND,
+        INTAKE_CORAL_FROM_STATION,
         MOVE_ALGAE_TO_PROCESSOR_POSITION,
         SCORE_ALGAE_IN_PROCESSOR,
         CLIMB
@@ -119,15 +116,12 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
 
     private boolean hasDriveToPointSetPointBeenSet = false;
 
-    private NeutralModeValue pastSwitchValue = NeutralModeValue.Brake;
+   // private NeutralModeValue pastSwitchValue = NeutralModeValue.Brake;
 
     private boolean hasPoseBeenResetPrematch = false;
 
-    private boolean allowExternalCommandToAccessLEDS = false;
-
-    private boolean hasElevatorReachedSetpoint = false;
-    private boolean hasCoral = false;
-    private boolean algaeMotorStalling = false;    
+   // private boolean allowExternalCommandToAccessLEDS = false;
+ 
 
     public Superstructure(SwerveSubsystem swerve, CoralSubsystem coral, AlgaeSubsystem algae, ElevatorSubsystem elev, LEDSubsystem led, Dash dash) {
         swerveSubsystem = swerve;
@@ -137,6 +131,192 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
         ledSubsystem = led;
         operatorDashboard = dash;
     }
+
+    @Override
+    public void periodic() {
+      Logger.recordOutput("ReefSelectionMethod", reefSelectionMethod);
+
+      Logger.recordOutput("Superstructure/hasProfileBeenSet", hasDriveToPointSetPointBeenSet);
+
+      automationLevel = operatorDashboard.getAutomationLevel();
+
+      Logger.recordOutput("Superstructure/WantedSuperState", wantedSuperState);
+      Logger.recordOutput("Superstructure/CurrentSuperState", currentSuperState);
+      Logger.recordOutput("Superstructure/PreviousSuperState", previousSuperState);   
+      
+      currentSuperState = handleStateTransitions();
+      applyStates();
+
+      if (DriverStation.isDisabled()) {
+         if (elevatorSubsystem.limitRead() && coralSubsystem.hasCoral()) {
+            ledSubsystem.setWantedAction(hasPoseBeenResetPrematch ? LEDSubsystem.WantedState.DISPLAY_READY_FOR_MATCH : LEDSubsystem.WantedState.DISPLAY_ROBOT_IS_PHYSICALLY_READY_FOR_MATCH);
+         } 
+      } else if (DriverStation.isAutonomous() && DriverStation.isEnabled()) {
+         ledSubsystem.setWantedAction(LEDSubsystem.WantedState.DISPLAY_OFF);
+      }
+   }
+
+   private CurrentSuperState handleStateTransitions() {
+      previousSuperState = currentSuperState;
+
+      switch (wantedSuperState) {
+         default: 
+            currentSuperState = CurrentSuperState.STOPPED;
+            break;
+         case HOME:
+            currentSuperState = CurrentSuperState.HOME;
+            break;
+         case FORCE_RELOCALIZE:
+            currentSuperState = CurrentSuperState.FORCE_RELOCALIZE;
+            break;
+         case SCORE_L1_MANUAL_ALIGN:
+            currentSuperState = CurrentSuperState.SCORE_TELEOP_L1_MANUAL_ALIGNMENT;
+            break;
+         case SCORE_LEFT_L2:
+            currentSuperState = DriverStation.isAutonomous() ? CurrentSuperState.SCORE_LEFT_AUTO_L2 : CurrentSuperState.SCORE_LEFT_TELEOP_L2;
+            break;
+         case SCORE_LEFT_L3:
+            currentSuperState = DriverStation.isAutonomous() ? CurrentSuperState.SCORE_LEFT_AUTO_L3 : CurrentSuperState.SCORE_LEFT_TELEOP_L3;
+            break;
+         case SCORE_LEFT_L4:
+            currentSuperState = DriverStation.isAutonomous() ? CurrentSuperState.SCORE_LEFT_AUTO_L4 : CurrentSuperState.SCORE_LEFT_TELEOP_L4;
+            break;
+         case SCORE_RIGHT_L2:
+            currentSuperState = DriverStation.isAutonomous() ? CurrentSuperState.SCORE_RIGHT_AUTO_L2 : CurrentSuperState.SCORE_RIGHT_TELEOP_L2;
+            break;
+         case SCORE_RIGHT_L3:
+            currentSuperState = DriverStation.isAutonomous() ? CurrentSuperState.SCORE_RIGHT_AUTO_L3 : CurrentSuperState.SCORE_RIGHT_TELEOP_L3;
+            break;
+         case SCORE_RIGHT_L4:
+            currentSuperState = DriverStation.isAutonomous() ? CurrentSuperState.SCORE_RIGHT_AUTO_L4 : CurrentSuperState.SCORE_RIGHT_TELEOP_L4;
+            break;
+         case MANUAL_L1:
+            currentSuperState = CurrentSuperState.MANUAL_L1;
+            break;
+         case MANUAL_L2:
+            currentSuperState = CurrentSuperState.MANUAL_L2;
+            break;
+         case MANUAL_L3:
+            currentSuperState = CurrentSuperState.MANUAL_L3;
+            break;
+         case MANUAL_L4:
+            currentSuperState = CurrentSuperState.MANUAL_L4;
+            break;
+         case INTAKE_ALGAE_FROM_REEF_TOP:
+            currentSuperState = CurrentSuperState.INTAKE_ALGAE_FROM_REEF_TOP;
+            break;
+         case INTAKE_ALGAE_FROM_REEF_BOT:
+            currentSuperState = CurrentSuperState.INTAKE_ALGAE_FROM_REEF_BOT;
+            break;
+         case INTAKE_ALGAE_FROM_REEF_GROUND:
+            currentSuperState = CurrentSuperState.INTAKE_ALGAE_FROM_REEF_GROUND;
+         case MOVE_ALGAE_TO_PROCESSOR_POSITION:
+            currentSuperState = CurrentSuperState.MOVE_ALGAE_TO_PROCESSOR_POSITION;
+            break;
+         case INTAKE_CORAL_FROM_STATION:
+            currentSuperState = CurrentSuperState.INTAKE_CORAL_FROM_STATION;
+            break;
+         case SCORE_ALGAE_IN_PROCESSOR:
+            currentSuperState = CurrentSuperState.SCORE_ALGAE_IN_PROCESSOR;
+            break;
+         case CLIMB:
+            currentSuperState = CurrentSuperState.CLIMB;
+            break;
+      }
+      return currentSuperState;
+   }
+
+   private void applyStates() {
+      switch (currentSuperState) {
+         case HOME:
+            home();
+            break;
+         case STOPPED:
+            stopped();
+            break;
+         case HOLDING_CORAL_TELEOP:
+            holdingCoral();
+            break;
+         case HOLDING_CORAL_AUTO:
+            holdingCoralAuto();
+            break;
+         case HOLDING_ALGAE:
+            holdingAlgae();
+            break;
+         case FORCE_RELOCALIZE:
+            relocalizeWithObservationToBeUsed();
+            break;
+         case SCORE_TELEOP_L1_MANUAL_ALIGNMENT:
+            ejectL1(); // could change if we add something. for now, redundant for manual_L1
+            break;
+         case SCORE_LEFT_TELEOP_L2:
+            scoreL2Teleop(Constants.SuperstructureConstants.ScoringSide.LEFT);
+            break;
+         case SCORE_LEFT_TELEOP_L3:
+            scoreL3Teleop(Constants.SuperstructureConstants.ScoringSide.LEFT);
+            break;
+         case SCORE_LEFT_TELEOP_L4:
+            scoreL4Teleop(Constants.SuperstructureConstants.ScoringSide.LEFT);
+            break;
+         case SCORE_RIGHT_TELEOP_L2:
+            scoreL2Teleop(Constants.SuperstructureConstants.ScoringSide.RIGHT);
+            break;
+         case SCORE_RIGHT_TELEOP_L3:
+            scoreL3Teleop(Constants.SuperstructureConstants.ScoringSide.RIGHT);
+            break;
+         case SCORE_RIGHT_TELEOP_L4:
+            scoreL4Teleop(Constants.SuperstructureConstants.ScoringSide.RIGHT);
+            break;
+         case SCORE_LEFT_AUTO_L2:
+            scoreL2Auto(Constants.SuperstructureConstants.ScoringSide.LEFT);
+            break;
+         case SCORE_LEFT_AUTO_L3:
+            scoreL3Auto(Constants.SuperstructureConstants.ScoringSide.LEFT);
+            break;
+         case SCORE_LEFT_AUTO_L4:
+            scoreL4Auto(Constants.SuperstructureConstants.ScoringSide.LEFT);
+            break;
+         case SCORE_RIGHT_AUTO_L2:
+            scoreL2Auto(Constants.SuperstructureConstants.ScoringSide.RIGHT);
+            break;
+         case SCORE_RIGHT_AUTO_L3:
+            scoreL3Auto(Constants.SuperstructureConstants.ScoringSide.RIGHT);
+            break;
+         case SCORE_RIGHT_AUTO_L4:
+            scoreL4Auto(Constants.SuperstructureConstants.ScoringSide.RIGHT);
+            break;
+         case MANUAL_L4:
+            ejectL4();
+            break;
+         case MANUAL_L3:
+            ejectL3();
+            break;           
+         case MANUAL_L2:
+            ejectL3();
+            break;   
+         case INTAKE_ALGAE_FROM_REEF_TOP:
+            intakeAlgaeFromReefTop();
+            break;   
+         case INTAKE_ALGAE_FROM_REEF_BOT:
+            intakeAlgaeFromReefBot();
+            break;  
+         case INTAKE_ALGAE_FROM_REEF_GROUND:
+            intakeAlgaeFromReefGround();
+            break;    
+         case INTAKE_CORAL_FROM_STATION:
+            intakeCoralFromStation();
+            break; 
+         case MOVE_ALGAE_TO_PROCESSOR_POSITION:
+            moveAlgaeToProcessorPosition();
+            break;
+         case SCORE_ALGAE_IN_PROCESSOR:
+            scoreAlgaeProcessor();
+            break;
+         case CLIMB:
+            climb();
+            break;   
+      }
+   }
 
 
 
@@ -151,7 +331,7 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
             elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.HOME);
         }
 
-        if (elevatorSubsystem.hasHomeCompleted() && previousSuperState == currentSuperState.HOME) {
+        if (elevatorSubsystem.hasHomeCompleted() && previousSuperState == CurrentSuperState.HOME) {
             setWantedSuperState(WantedSuperState.DEFAULT_STATE);
         }
 
@@ -632,6 +812,10 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
   public void setDesiredReefLevelForDriveToPoint(Constants.SuperstructureConstants.ScoringLevel level) {
    scoringLevel = level;
   }
+
+  public void toggleHasPoseBeenSetForPrematch(boolean hasPoseBeenResetPrematch) {
+   this.hasPoseBeenResetPrematch = hasPoseBeenResetPrematch;
+}
 
   public void setDesiredScoringSideForDriveToPoint(Constants.SuperstructureConstants.ScoringSide side) {
    scoringSide = side;

@@ -227,4 +227,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         return isElevatorHomed;
     }
 
+    public boolean limitRead() {
+        return limiterInputs.limit;
+    }
+
 }
