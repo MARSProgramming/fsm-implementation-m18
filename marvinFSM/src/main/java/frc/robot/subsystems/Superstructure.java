@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.fasterxml.jackson.databind.introspect.NopAnnotationIntrospector;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -81,6 +82,7 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
         STOPPED,
         HOLDING_CORAL_TELEOP,
         NO_PIECE_AUTO,
+        NO_PIECE_TELEOP,
         HOLDING_CORAL_AUTO,
         HOLDING_ALGAE,
         FORCE_RELOCALIZE,
@@ -210,6 +212,7 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
             break;
          case INTAKE_ALGAE_FROM_REEF_GROUND:
             currentSuperState = CurrentSuperState.INTAKE_ALGAE_FROM_REEF_GROUND;
+            break;
          case MOVE_ALGAE_TO_PROCESSOR_POSITION:
             currentSuperState = CurrentSuperState.MOVE_ALGAE_TO_PROCESSOR_POSITION;
             break;
@@ -221,6 +224,21 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
             break;
          case CLIMB:
             currentSuperState = CurrentSuperState.CLIMB;
+            break;
+         case DEFAULT_STATE:
+            if (coralSubsystem.hasCoral()) {
+               if (DriverStation.isAutonomous()) {
+                  currentSuperState = CurrentSuperState.HOLDING_CORAL_AUTO;
+               } else {
+                  currentSuperState = CurrentSuperState.HOLDING_CORAL_TELEOP;
+               } 
+            } else {
+               if (DriverStation.isAutonomous()) {
+                  currentSuperState = CurrentSuperState.NO_PIECE_AUTO;
+               } else {
+                  currentSuperState = CurrentSuperState.NO_PIECE_TELEOP;
+               }
+            }
             break;
       }
       return currentSuperState;
@@ -234,6 +252,10 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
          case STOPPED:
             stopped();
             break;
+         case NO_PIECE_AUTO:
+            noPieceAuto();
+         case NO_PIECE_TELEOP:
+            noPiece();
          case HOLDING_CORAL_TELEOP:
             holdingCoral();
             break;
@@ -292,8 +314,11 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
             ejectL3();
             break;           
          case MANUAL_L2:
-            ejectL3();
-            break;   
+            ejectL2();
+            break;  
+         case MANUAL_L1:
+            ejectL1();
+            break;    
          case INTAKE_ALGAE_FROM_REEF_TOP:
             intakeAlgaeFromReefTop();
             break;   
@@ -360,7 +385,7 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
      }
 
      private void holdingCoral() {
-         coralSpitFlag = false;
+        coralSpitFlag = false;
         hasDriveToPointSetPointBeenSet = false;
 
         elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L1);
