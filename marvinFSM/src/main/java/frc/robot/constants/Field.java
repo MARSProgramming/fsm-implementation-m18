@@ -150,14 +150,13 @@ public class Field {
             int tagID,
             Constants.SuperstructureConstants.ScoringSide scoringSide,
             Constants.SuperstructureConstants.ScoringLevel level) {
-        return getDesiredPointToDriveToForCoralScoring(tagID, scoringSide, level, 0.0);
+        return getDesiredPointToDriveToForCoralScoring(tagID, scoringSide, level);
     }
 
     public static Pose2d getDesiredPointToDriveToForCoralScoring(
             int tagID,
             Constants.SuperstructureConstants.ScoringSide scoringSide,
-            Constants.SuperstructureConstants.ScoringLevel level,
-            double distanceFromFinalScoringPose) {
+            Constants.SuperstructureConstants.ScoringLevel level) {
         
         double xOffset = 0;
         double yOffset = 0;
@@ -203,8 +202,8 @@ public class Field {
                 }         
             }
 
-            xOffset = Units.inchesToMeters(xOffset + Units.metersToInches(distanceFromFinalScoringPose));
-            yOffset = Units.inchesToMeters(yOffset + Units.metersToInches(distanceFromFinalScoringPose));
+          //  xOffset = Units.inchesToMeters(xOffset + Units.metersToInches(distanceFromFinalScoringPose));
+          //  yOffset = Units.inchesToMeters(yOffset + Units.metersToInches(distanceFromFinalScoringPose));
 
 
             if (scoringSide == Constants.SuperstructureConstants.ScoringSide.RIGHT) {

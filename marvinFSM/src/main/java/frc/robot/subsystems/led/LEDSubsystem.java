@@ -27,6 +27,7 @@ public class LEDSubsystem extends SubsystemBase {
         DISPLAY_ROBOT_ZERO_ACTION,
         DISPLAY_READY_FOR_MATCH,
         DISPLAY_INTAKING_ALGAE,
+        DISPLAY_INTAKING_CORAL,
         DISPLAY_HOLDING_ALGAE,
         DISPLAY_ALIGN_TO_PROCESSOR,
         DISPLAY_SCORE_PROCESSOR,
@@ -54,6 +55,7 @@ public class LEDSubsystem extends SubsystemBase {
         DISPLAYING_ROBOT_ZERO_ACTION,
         DISPLAYING_READY_FOR_MATCH,
         DISPLAYING_INTAKING_ALGAE,
+        DISPLAYING_INTAKING_CORAL,
         DISPLAYING_HOLDING_ALGAE,
         DISPLAYING_ALIGN_TO_PROCESSOR,
         DISPLAYING_SCORE_PROCESSOR,
@@ -85,6 +87,7 @@ public class LEDSubsystem extends SubsystemBase {
             case DISPLAY_ROBOT_ZERO_ACTION -> SystemState.DISPLAYING_ROBOT_ZERO_ACTION;
             case DISPLAY_READY_FOR_MATCH -> SystemState.DISPLAYING_READY_FOR_MATCH;
             case DISPLAY_INTAKING_ALGAE -> SystemState.DISPLAYING_INTAKING_ALGAE;
+            case DISPLAY_INTAKING_CORAL -> SystemState.DISPLAYING_INTAKING_CORAL;
             case DISPLAY_HOLDING_ALGAE -> SystemState.DISPLAYING_HOLDING_ALGAE;
             case DISPLAY_ALIGN_TO_PROCESSOR -> SystemState.DISPLAYING_ALIGN_TO_PROCESSOR;
             case DISPLAY_SCORE_PROCESSOR -> SystemState.DISPLAYING_SCORE_PROCESSOR;
@@ -151,6 +154,9 @@ public class LEDSubsystem extends SubsystemBase {
                 break;
             case DISPLAYING_INTAKING_ALGAE:
                 ledIO.setLEDs(66, 245, 233);
+                break;
+            case DISPLAYING_INTAKING_CORAL:
+                ledIO.setLEDs(255, 255, 255);
                 break;
             case DISPLAYING_HOLDING_ALGAE:
                 ledIO.setAnimation(getAnimation(AnimationType.FADE, 66, 245, 233, 0.9));

@@ -204,8 +204,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setDesiredElevatorSetpoint(double position) {
-        setWantedState(WantedState.MOVE_TO_POSITION);
         this.elevatorSetpoint = position;
+        setWantedState(WantedState.MOVE_TO_POSITION);
     }
 
         
