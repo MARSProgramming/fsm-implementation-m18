@@ -35,6 +35,7 @@ public class SwerveIOCTRE extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> i
 
     SwerveDrivePoseEstimator estimator;
     
+    @SuppressWarnings("unchecked")
     public SwerveIOCTRE(
             SwerveDrivetrainConstants constants,
             SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>...

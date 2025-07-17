@@ -10,7 +10,6 @@ import frc.robot.util.CanDeviceId;
 
 import frc.robot.util.ConfigureSlot0Gains;
 
-import java.util.List;
 
 public class DriveConstants {
     private static final String CANIVORE_CANBUS_NAME = "CAN-2";
@@ -87,6 +86,7 @@ public class DriveConstants {
     private static SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>[]
             moduleConstants;
 
+    @SuppressWarnings("unchecked")
     public DriveConstants() {
 
         Pigeon2Configuration pigeon2Configuration = new Pigeon2Configuration();

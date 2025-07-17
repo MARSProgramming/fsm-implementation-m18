@@ -17,7 +17,6 @@ import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.algae.GrabberIOSparkMax;
 import frc.robot.subsystems.coral.CoralSubsystem;
 import frc.robot.subsystems.coral.SensorIORoboRIO;
-import frc.robot.subsystems.coral.SpitterIO;
 import frc.robot.subsystems.coral.SpitterIOTalonSRX;
 import frc.robot.subsystems.elevator.ElevatorIOTalonFX;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;

@@ -2,8 +2,6 @@ package frc.robot.subsystems.coral;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.coral.SensorIOInputsAutoLogged;
-import frc.robot.subsystems.coral.SpitterIOInputsAutoLogged;
 import frc.robot.util.SubsystemDataProcessor;
 
 public class CoralSubsystem extends SubsystemBase {
