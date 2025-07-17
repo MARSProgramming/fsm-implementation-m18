@@ -81,9 +81,11 @@ public class AlgaeSubsystem extends SubsystemBase {
             }
             case INTAKING -> {
                 grabberIO.run(1.0);
+                break;
             }
             case HOLDING -> {
                 grabberIO.run(0.5);
+                break;
             }
         }
     }
