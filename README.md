@@ -12,11 +12,12 @@ This project is part of a broader goal to bring more robust software engineering
 - [X] Refactor 2910's 2025 REEFSCAPE vision code for PhotonVision
 - [X] Determine and create superstructure ENUMs for state management
 - [X] Create superstructure layout
-- [ ] Complete superstructure
-- [ ] Determine how to create a single-operator control scheme with toggled input
+- [X] Complete superstructure
+- [ ] Determine how to create a single-operator control scheme with toggled input (In progress)
 - [ ] Implement testing controls and functionality
 - [ ] Implement Choreo and autonomous functionality (Autonomous factories and file handling for Choreo)
-- [ ] Populate RobotContainer with subsystems and superstructure
+- [X] Populate RobotContainer with subsystems and superstructure
+- [ ] Configure LoggedRobot structure (In progress)
 - [ ] Clean up code for review
 
 ## Planned
