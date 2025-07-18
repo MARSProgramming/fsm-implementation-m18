@@ -63,12 +63,14 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
         MANUAL_L3,
         MANUAL_L2,
         MANUAL_L1,
+        HOLD_ALGAE,
         INTAKE_ALGAE_FROM_REEF_TOP,
         INTAKE_ALGAE_FROM_REEF_BOT,
         INTAKE_ALGAE_FROM_REEF_GROUND,
         INTAKE_CORAL_FROM_STATION,
         MOVE_ALGAE_TO_PROCESSOR_POSITION,
         SCORE_ALGAE_IN_PROCESSOR,
+        PREP_CLIMB,
         CLIMB
     }
 
@@ -104,6 +106,7 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
         INTAKE_CORAL_FROM_STATION,
         MOVE_ALGAE_TO_PROCESSOR_POSITION,
         SCORE_ALGAE_IN_PROCESSOR,
+        PREP_CLIMB,
         CLIMB
     }
 
@@ -211,12 +214,17 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
          case MOVE_ALGAE_TO_PROCESSOR_POSITION:
             currentSuperState = CurrentSuperState.MOVE_ALGAE_TO_PROCESSOR_POSITION;
             break;
+         case HOLD_ALGAE:
+            currentSuperState = CurrentSuperState.HOLDING_ALGAE;
+            break;
          case INTAKE_CORAL_FROM_STATION:
             currentSuperState = CurrentSuperState.INTAKE_CORAL_FROM_STATION;
             break;
          case SCORE_ALGAE_IN_PROCESSOR:
             currentSuperState = CurrentSuperState.SCORE_ALGAE_IN_PROCESSOR;
             break;
+         case PREP_CLIMB:
+            currentSuperState = CurrentSuperState.PREP_CLIMB;
          case CLIMB:
             currentSuperState = CurrentSuperState.CLIMB;
             break;
@@ -334,6 +342,8 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
          case SCORE_ALGAE_IN_PROCESSOR:
             scoreAlgaeProcessor();
             break;
+         case PREP_CLIMB:
+            prepClimb();
          case CLIMB:
             climb();
             break;   
@@ -370,7 +380,6 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
 
      private void holdingAlgae() {
         hasDriveToPointSetPointBeenSet = false;
-        elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_ALGAE_TEE);
 
         swerveSubsystem.setWantedState(SwerveSubsystem.WantedState.TELEOP_DRIVE);
         swerveSubsystem.setTeleopVelocityCoefficient(1.0);
@@ -379,15 +388,17 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
         ledSubsystem.setWantedAction(LEDSubsystem.WantedState.DISPLAY_HOLDING_ALGAE);
         
         algaeSubsystem.setWantedState(AlgaeSubsystem.WantedState.HOLD);
+        elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.HOLD_POSITION);
      }
 
      private void holdingCoral() {
         coralSpitFlag = false;
         hasDriveToPointSetPointBeenSet = false;
 
-        elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L1);
+        elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.HOLD_POSITION);
 
         coralSubsystem.setWantedState(CoralSubsystem.WantedState.PASSIVE_INTAKE);
+        algaeSubsystem.setWantedState(AlgaeSubsystem.WantedState.IDLE);
 
         swerveSubsystem.setWantedState(SwerveSubsystem.WantedState.TELEOP_DRIVE);
         swerveSubsystem.setTeleopVelocityCoefficient(1.0);
@@ -395,14 +406,15 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
      }
 
      private void holdingCoralAuto() {
-        elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L1);
-        coralSubsystem.setWantedState(CoralSubsystem.WantedState.PASSIVE_INTAKE);
+      elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.HOLD_POSITION);
+      algaeSubsystem.setWantedState(AlgaeSubsystem.WantedState.IDLE);
+      coralSubsystem.setWantedState(CoralSubsystem.WantedState.PASSIVE_INTAKE);
      }
 
 
      private void noPiece() {
         hasDriveToPointSetPointBeenSet = false;
-        elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L1);
+        elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.HOLD_POSITION);
         coralSubsystem.setWantedState(CoralSubsystem.WantedState.PASSIVE_INTAKE);
         swerveSubsystem.setWantedState(SwerveSubsystem.WantedState.TELEOP_DRIVE);
         swerveSubsystem.setTeleopVelocityCoefficient(1.0);
@@ -468,6 +480,11 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
       if (elevatorSubsystem.reachedSetpoint()) {
          elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.HOLD_POSITION);
       }
+     }
+
+     private void prepClimb() {
+      elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L2);
+      elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.OPEN_SERVO);
      }
 
      private void intakeAlgaeFromReefGround() {
@@ -670,9 +687,10 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
    }
 
    private void scoreAlgaeProcessor() {
-      if (algaeSubsystem.isHolding()) {
-         algaeSubsystem.setWantedState(AlgaeSubsystem.WantedState.SPIT);
-      } else {
+      algaeSubsystem.setWantedState(AlgaeSubsystem.WantedState.SPIT);
+
+      // led check  
+      if (!algaeSubsystem.isHolding()) {
          ledSubsystem.setWantedAction(LEDSubsystem.WantedState.DISPLAY_TAG_NOT_SEEN); 
       }
    }
@@ -808,7 +826,7 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
       return true;
      }
 
-        public Command configureButtonBinding(
+      public Command configureButtonBinding(
             WantedSuperState hasCoralCondition,
             WantedSuperState hasAlgaeCondition,
             WantedSuperState noPieceCondition) {

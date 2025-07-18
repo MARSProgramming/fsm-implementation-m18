@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.SubsystemDataProcessor;
 
+// TODO: add Timeout failsafe to elevator homing
 public class ElevatorSubsystem extends SubsystemBase {
     private final ElevatorIO elevatorIO;
     private final LimiterIO limitIO;
@@ -24,6 +25,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         IDLE,
         MOVE_TO_POSITION,
         HOLD_POSITION,
+        OPEN_SERVO,
         CLIMB
     }
 
@@ -32,6 +34,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         IDLING,
         MOVING_TO_POSITION,
         HOLDING_POSITION,
+        OPENING_SERVO,
         CLIMBING
     }
 
@@ -135,9 +138,15 @@ public class ElevatorSubsystem extends SubsystemBase {
                 return SystemState.CLIMBING;
             }
 
+            case OPEN_SERVO -> {
+                return SystemState.OPENING_SERVO;
+            }
+
             default -> {
                 return SystemState.IDLING;
             }
+
+
 
         }
 
@@ -147,6 +156,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void applyStates() {
         switch (systemState) {
             case HOMING -> {
+                limitIO.targetServoPosition(0);
                 if (DriverStation.isAutonomous() && !DriverStation.isDisabled()) {
                     elevatorIO.applyVoltage(-6); // replace with a constant later
                 } else {
@@ -156,6 +166,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             }
 
             case IDLING -> {
+                limitIO.targetServoPosition(0);
                 elevatorIO.applyVoltage(0);
                 break;
             }
@@ -176,6 +187,10 @@ public class ElevatorSubsystem extends SubsystemBase {
                 limitIO.targetServoPosition(0);
                 elevatorIO.setTargetPosition(elevatorInputs.elevPosition);
                 break;
+            }
+
+            case OPENING_SERVO -> {
+                limitIO.targetServoPosition(0.5);
             }
         }
     }
@@ -206,6 +221,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void setDesiredElevatorSetpoint(double position) {
         this.elevatorSetpoint = position;
         setWantedState(WantedState.MOVE_TO_POSITION);
+    }
+
+    public void zeroElevator(double position) {
+        setWantedState(ElevatorSubsystem.WantedState.HOME);
     }
 
         

@@ -11,6 +11,10 @@ public class CoralSubsystem extends SubsystemBase {
     private final SensorIOInputsAutoLogged sensorInputs = new SensorIOInputsAutoLogged();
     private final SpitterIOInputsAutoLogged spitterInputs = new SpitterIOInputsAutoLogged();
 
+    private static final int SENSOR_DELAY_CYCLES = 10; // Number of cycles to confirm sensor state
+    private int sensorTrueCounter = 0;
+    private int sensorFalseCounter = 0;
+    private boolean sensorState = false;
 
     public enum WantedState {
         IDLE,
@@ -53,6 +57,8 @@ public class CoralSubsystem extends SubsystemBase {
                 Logger.processInputs("Subsystems/Coralgun/Spitter", spitterInputs);
                 Logger.processInputs("Subsystems/Coralgun/Sensor", sensorInputs);
 
+                updateSensorState();
+
                 systemState = handleStateTransition();
                 Logger.recordOutput("Subsystems/Coralgun/WantedState", wantedState);
                 Logger.recordOutput("Subsystems/Coralgun/SystemState", systemState);
@@ -62,6 +68,23 @@ public class CoralSubsystem extends SubsystemBase {
         }
     }
 
+    private void updateSensorState() {
+        if (sensorInputs.sensorTripped) {
+            sensorTrueCounter++;
+            sensorFalseCounter = 0;
+        } else {
+            sensorFalseCounter++;
+            sensorTrueCounter = 0;
+        }
+
+        if (sensorTrueCounter >= SENSOR_DELAY_CYCLES) {
+            sensorState = true;
+        } else if (sensorFalseCounter >= SENSOR_DELAY_CYCLES) {
+            sensorState = false;
+        }
+
+        Logger.recordOutput("Subsystems/Coralgun/SensorState", sensorState);
+    }
 
     private SystemState handleStateTransition() {
         switch (wantedState) {
@@ -117,8 +140,6 @@ public class CoralSubsystem extends SubsystemBase {
     }
 
     public boolean hasCoral() {
-        synchronized (sensorInputs) {
-            return sensorInputs.sensorTripped;
-        }
+        return sensorState;
     }
 }
