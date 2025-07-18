@@ -249,8 +249,10 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
             break;
          case NO_PIECE_AUTO:
             noPieceAuto();
+            break;
          case NO_PIECE_TELEOP:
             noPiece();
+            break;
          case HOLDING_CORAL_TELEOP:
             holdingCoral();
             break;
