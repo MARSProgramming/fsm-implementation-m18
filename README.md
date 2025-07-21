@@ -43,9 +43,9 @@ This project is part of a broader goal to bring more robust software engineering
     - Remove unecessary methods
     - Make code readable
 
-*Considering*: Add Superstructure states that command the elevator to a setpoint, independent of autoalign. Failsafe for vision.
-*Considering*: implement L1 scoring
-*Considering*: Create an Elastic layout concept.
+- *Considering*: Add Superstructure states that command the elevator to a setpoint, independent of autoalign. Failsafe for vision.
+- *Considering*: implement L1 scoring
+- *Considering*: Create an Elastic layout concept.
 
 ## Planned
 - [ ] In-depth, comprehensive analysis of superstructure, susbystems, and how the state machine is implemented to ensure a reliable robot for testing
