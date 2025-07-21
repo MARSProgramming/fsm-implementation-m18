@@ -12,6 +12,7 @@ This project is part of a broader goal to bring more robust software engineering
 
 ## Reef Side Labels for Auto (from 2910)
 <img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/AutonomousReefLabelling.png" alt="reef_map" width="800">
+
 ## Project Progress
 - [X] Create project and install dependencies
 - [X] Develop IO architecture for all subsystems
