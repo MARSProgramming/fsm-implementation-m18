@@ -447,7 +447,7 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
 
          ledSubsystem.setWantedAction(LEDSubsystem.WantedState.DISPLAY_HOLDING_CORAL);
          if (coralSubsystem.hasCoral()) {
-            elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L2);
+          //  elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L2);
             coralSubsystem.setWantedState(CoralSubsystem.WantedState.PASSIVE_INTAKE);
             if (elevatorSubsystem.reachedSetpoint()) { 
                elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.HOLD_POSITION);

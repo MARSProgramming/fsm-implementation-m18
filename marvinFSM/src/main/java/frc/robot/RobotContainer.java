@@ -69,6 +69,7 @@ public class RobotContainer {
 
   private void configureBindings() {
     controller.leftStick().onTrue(instantCommand(superstructure::toggleReefSelectionMethod));
+    controller.rightStick().onTrue(instantCommand(superstructure::toggleAlgaeMode));
 
     controller
               .leftTrigger()

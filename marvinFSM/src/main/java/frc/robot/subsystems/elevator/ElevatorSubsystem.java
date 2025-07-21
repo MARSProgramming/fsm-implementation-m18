@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.SubsystemDataProcessor;
 
@@ -16,6 +17,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final LimiterIOInputsAutoLogged limiterInputs = new LimiterIOInputsAutoLogged();
 
     private boolean isElevatorHomed = false;
+    private boolean homedSafely = false;
+    private double elevatorHomeTimestamp = Double.NaN;
 
     private double elevatorSetpoint = 0.0;
     private double elevatorVoltageSetpoint = 0.0;
@@ -68,7 +71,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                 systemState = handleStateTransition();
                 Logger.recordOutput("Subsystems/Elevator/WantedState", wantedState);
                 Logger.recordOutput("Subsystems/Elevator/SystemState", systemState);
-
+                Logger.recordOutput("Subsystems/Elevator/HomedSafely", homedSafely);
                 double wantedElevatorSetpoint;
                 double wantedElevatorVoltage;
 
@@ -90,41 +93,42 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         switch (wantedState) {
             case HOME -> {
+    
                 if (previousWantedState != WantedState.HOME) {
                     isElevatorHomed = false;
                 }
-                
+
                 if (!DriverStation.isDisabled()) {
-                    if (DriverStation.isAutonomous()) {
-                        if (Math.abs(elevatorInputs.elevAppliedVolts) <= 6) {
-                            return SystemState.HOMING;
-                        }
-                        if (limiterInputs.limit == true && elevatorInputs.elevPosition < 0.05) {
-                            isElevatorHomed = true;
-                            elevatorIO.resetPosition();
-
-                            setWantedState(WantedState.IDLE);
-                            return SystemState.IDLING;
-                        }
-                    }
-
-                    if (DriverStation.isTeleop()) {
-                        if (Math.abs(elevatorInputs.elevAppliedVolts) <= 5) {
+                    if (Math.abs(elevatorInputs.elevAngularVelocityRadPerSec) <= 0.5) {
+                        if (Double.isNaN(elevatorHomeTimestamp)) {
+                            elevatorHomeTimestamp = Timer.getFPGATimestamp();
                             return SystemState.HOMING;
                         }
 
-                        if (limiterInputs.limit == true && elevatorInputs.elevPosition < 0.05) {
-                            isElevatorHomed = true;
-                            elevatorIO.resetPosition();
+                        if ((Timer.getFPGATimestamp() - elevatorHomeTimestamp) >= 3) { // maximum zeroing time
+                            if (limiterInputs.limit && elevatorInputs.elevPosition < 0.1) {
+                                isElevatorHomed = true;
+                                homedSafely = true;
 
-                            setWantedState(WantedState.IDLE);
-                            return SystemState.IDLING;
+                                elevatorHomeTimestamp = Double.NaN;
+                                setWantedState(WantedState.IDLE);
+                                return SystemState.IDLING;
+                            } else {
+                                isElevatorHomed = true;
+                                homedSafely = false;
+                                elevatorHomeTimestamp = Double.NaN;
+                                setWantedState(WantedState.IDLE);
+                                return SystemState.IDLING;
+                            }
                         }
-                    } else {
-                        return SystemState.IDLING;
-                    }
+
+                        return SystemState.HOMING;
+                    } 
+                } else {
+                    return SystemState.IDLING;
                 }
-            }
+                
+            } 
 
             case MOVE_TO_POSITION -> {
                 return SystemState.MOVING_TO_POSITION;

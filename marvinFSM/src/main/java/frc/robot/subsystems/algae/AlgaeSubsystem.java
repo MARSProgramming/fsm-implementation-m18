@@ -2,6 +2,8 @@ package frc.robot.subsystems.algae;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.SubsystemDataProcessor;
 
@@ -9,6 +11,8 @@ public class AlgaeSubsystem extends SubsystemBase {
     private final GrabberIO grabberIO;
     private final GrabberIOInputsAutoLogged grabberInputs = new GrabberIOInputsAutoLogged();
 
+    private double algaeSpittingTimestamp = Double.NaN;
+    private static final double ALGAE_SPIT_DURATION = 2; // spit for 2 seconds 
     public enum WantedState {
         IDLE,
         INTAKE,
@@ -55,8 +59,22 @@ public class AlgaeSubsystem extends SubsystemBase {
             case IDLE -> {
                 return SystemState.IDLING;
             }
-            case SPIT -> {
-                return SystemState.SPITTING;
+        case SPIT -> {
+            if (!DriverStation.isDisabled()) {
+                if (Double.isNaN(algaeSpittingTimestamp)) {
+                    algaeSpittingTimestamp = Timer.getFPGATimestamp();
+                    return SystemState.SPITTING;
+            } else if ((Timer.getFPGATimestamp() - algaeSpittingTimestamp) > ALGAE_SPIT_DURATION) {
+                algaeSpittingTimestamp = Double.NaN;
+            setWantedState(WantedState.IDLE);
+            return SystemState.IDLING;
+            } else {
+                return SystemState.SPITTING; // <-- stay in SPITTING until duration passes
+            }
+            } else {
+                algaeSpittingTimestamp = Double.NaN; // optional: reset if disabled
+                return SystemState.IDLING;
+            }
             }
             case INTAKE -> {
                 return SystemState.INTAKING;

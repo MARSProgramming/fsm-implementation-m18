@@ -1,6 +1,8 @@
 package frc.robot.subsystems.coral;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.SubsystemDataProcessor;
 
@@ -15,6 +17,14 @@ public class CoralSubsystem extends SubsystemBase {
     private int sensorTrueCounter = 0;
     private int sensorFalseCounter = 0;
     private boolean sensorState = false;
+
+    private double spitterTimestamp = Double.NaN;
+    private double spitterL1Timestamp = Double.NaN;
+    private double ejectTimestamp = Double.NaN;
+
+    private static final double SPIT_DURATION = 0.5;
+    private static final double SPIT_L1_DURAITON = 0.5;
+    private static final double EJECT_DURATION = 0.7;  // eject for longer as its going upwards the ramp. ejecting in general is probably useless, but good practice!
 
     public enum WantedState {
         IDLE,
@@ -92,13 +102,56 @@ public class CoralSubsystem extends SubsystemBase {
                 return SystemState.IDLING;
             }
             case SPIT -> {
-                return SystemState.SPITTING;
+                if (!DriverStation.isDisabled()) {
+                    if (Double.isNaN(spitterTimestamp)) {
+                        spitterTimestamp = Timer.getFPGATimestamp();
+                        return SystemState.SPITTING;
+                    } else if ((Timer.getFPGATimestamp() - spitterTimestamp) > SPIT_DURATION) {
+                        spitterTimestamp = Double.NaN;
+                        setWantedState(WantedState.IDLE);
+                        return SystemState.IDLING;
+                    } else {
+                        return SystemState.SPITTING; // <-- stay in SPITTING until duration passes
+                    }
+                } else {
+                    spitterTimestamp = Double.NaN; // optional: reset if disabled
+                    return SystemState.IDLING;
+                }
             }
+            
             case SPIT_L1 -> {
-                return SystemState.SPITTING_L1;
+                if (!DriverStation.isDisabled()) {
+                    if (Double.isNaN(spitterL1Timestamp)) {
+                        spitterL1Timestamp = Timer.getFPGATimestamp();
+                        return SystemState.SPITTING;
+                    } else if ((Timer.getFPGATimestamp() - spitterL1Timestamp) > SPIT_L1_DURAITON) {
+                        spitterL1Timestamp = Double.NaN;
+                        setWantedState(WantedState.IDLE);
+                        return SystemState.IDLING;
+                    } else {
+                        return SystemState.SPITTING; // <-- stay in SPITTING until duration passes
+                    }
+                } else {
+                    spitterL1Timestamp = Double.NaN; // optional: reset if disabled
+                    return SystemState.IDLING;
+                }
             }
             case EJECT -> {
-                return SystemState.EJECTING;
+                if (!DriverStation.isDisabled()) {
+                    if (Double.isNaN(ejectTimestamp)) {
+                        ejectTimestamp = Timer.getFPGATimestamp();
+                        return SystemState.SPITTING;
+                    } else if ((Timer.getFPGATimestamp() - ejectTimestamp) > EJECT_DURATION) {
+                        ejectTimestamp = Double.NaN;
+                        setWantedState(WantedState.IDLE);
+                        return SystemState.IDLING;
+                    } else {
+                        return SystemState.SPITTING; // <-- stay in SPITTING until duration passes
+                    }
+                } else {
+                    ejectTimestamp = Double.NaN; // optional: reset if disabled
+                    return SystemState.IDLING;
+                }
             }
             case PASSIVE_INTAKE -> {
                 return SystemState.PASSIVE_INTAKING;
