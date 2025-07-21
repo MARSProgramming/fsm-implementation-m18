@@ -4,6 +4,10 @@ This is an offseason project structured around the development of a Finite State
 This effort is intended to improve the robot’s autonomy, response time, and task execution consistency by organizing actions into well-defined states and transitions. By clearly separating robot logic into manageable states (such as intake, alignment, scoring, and idle), the FSM allows for more maintainable and testable code while reducing the chances of unexpected behavior or “getting stuck” between commands. It intends to minimize delay and maximize computational efficiency of methods executed on the robot.
 
 This project is part of a broader goal to bring more robust software engineering practices into our robot codebase. As we iterate and test this FSM model on Marvin 18, more features will be added.
+## Current Control Scheme (v1, updated July 21st)
+
+<img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/AlgaeMode.png" alt="" width="400">
+
 
 ## Project Progress
 - [X] Create project and install dependencies
