@@ -203,5 +203,21 @@ public class RobotContainer {
     };
 }
 
+public LEDSubsystem getLedSubsystem() {
+  return ledSubsystem;
+}
+
+public SwerveSubsystem getSwerveSubsystem() {
+  return swerveSubsystem;
+}
+
+public VisionSubsystem getVisionSubsystem() {
+  return visionSubsystem;
+}
+
+public Superstructure getSuperstructure() {
+  return superstructure;
+}
+
   
 }
