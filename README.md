@@ -13,7 +13,10 @@ This project is part of a broader goal to bring more robust software engineering
 ## Reef Side Labels for Auto (from 2910)
 <img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/AutonomousReefLabelling.png" alt="reef_map" width="800">
 
-## Project Progress
+# Project Tracker - Completions, Todos, & Future Plans 
+- 7/21: So far, a lot has been accomplished. The core structure of code has been created. I estimate approx. 80% completion of this codebase.
+
+## Completed
 - [X] Create project and install dependencies
 - [X] Develop IO architecture for all subsystems
 - [X] Implement state machine logic for subsystems
@@ -21,21 +24,34 @@ This project is part of a broader goal to bring more robust software engineering
 - [X] Determine and create superstructure ENUMs for state management
 - [X] Create superstructure layout
 - [X] Complete superstructure
-- [X] Determine how to create a single-operator control scheme with toggled input (implemented, v1)
+- [X] Determine how to create a single-operator control scheme with toggled input (implemented, v0)
     - On this topic, we can add more states that allow for manual elevator setpoints for a vision failsafe. We have enough buttons to do so.
-- [ ] Implement testing controls
+    - Implement v1
 - [X] Add timeout mechanisms to elevator zeroing, shooting on each level, and spitting algae.
 - [X] Because we don't have a sensor to detect if we have algae, we can isntead make this a driver input. (Ex. pressing left stick enters Algae Mode, and this sets the state commands for the entire controller to Algae.)
 - [X] Implement Choreo and autonomous functionality (Autonomous factories and file handling for Choreo)
-    - Not completed; understand that with Drive to point autos, we don't even need Choreo. We can just PID to point for every single action. Our robot layout allows us to do this comfortably. 
+    - understand that with Drive to point autos, we don't even need Choreo. We can just PID to point for every single action. Our robot layout allows us to do this comfortably. 
 - [X] Populate RobotContainer with subsystems and superstructure
 - [X] Configure LoggedRobot structure 
+
+## In-Progress 
+- [ ] Implement testing controls
+- [ ] Implement v1 control scheme in RobotContainer
+- [ ] Implement all auto plays 
 - [ ] Clean up code for review
+    - Check for "stuck" states - if we enter a state, will the robot get stuck there despite callbacks.
+    - Remove unecessary methods
+    - Make code readable
+
+*Considering*: Add Superstructure states that command the elevator to a setpoint, independent of autoalign. Failsafe for vision.
+*Considering*: implement L1 scoring
+*Considering*: Create an Elastic layout concept.
 
 ## Planned
 - [ ] In-depth, comprehensive analysis of superstructure, susbystems, and how the state machine is implemented to ensure a reliable robot for testing
 - [ ] Real-world testing of system and PID tuning 
 - [ ] Tuning of autonomous functionality
+- [ ] LED functional tuning (not a priority)
 - [ ] Add failure mode management - if a sensor fails, the robot should still be able to perform tasks.
 - [ ] Add support for Limelight 4s if we decide to shift to them for next season.
 
