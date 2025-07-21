@@ -16,8 +16,8 @@ This project is part of a broader goal to bring more robust software engineering
 - [X] Determine how to create a single-operator control scheme with toggled input (implemented, v1)
     - On this topic, we can add more states that allow for manual elevator setpoints for a vision failsafe. We have enough buttons to do so.
 - [ ] Implement testing controls and functionality
-- [ ] Add timeout mechanisms to elevator zeroing, shooting on each level, and spitting algae.
-- [ ] Because we don't have a sensor to detect if we have algae, we can isntead make this a driver input. (Ex. pressing left stick enters Algae Mode, and this sets the state commands for the entire controller to Algae.)
+- [X] Add timeout mechanisms to elevator zeroing, shooting on each level, and spitting algae.
+- [X] Because we don't have a sensor to detect if we have algae, we can isntead make this a driver input. (Ex. pressing left stick enters Algae Mode, and this sets the state commands for the entire controller to Algae.)
 - [ ] Implement Choreo and autonomous functionality (Autonomous factories and file handling for Choreo)
 - [X] Populate RobotContainer with subsystems and superstructure
 - [ ] Configure LoggedRobot structure (In progress)
