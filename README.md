@@ -6,7 +6,9 @@ This effort is intended to improve the robot’s autonomy, response time, and ta
 This project is part of a broader goal to bring more robust software engineering practices into our robot codebase. As we iterate and test this FSM model on Marvin 18, more features will be added.
 ## Current Control Scheme (v1, updated July 21st)
 
-<img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/AlgaeMode.png" alt="" width="400">
+<img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/AlgaeMode.png" alt="" width="800">
+<img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/CoralMode.png" alt="" width="800">
+<img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/NoPieceMode.png" alt="" width="800">
 
 
 ## Project Progress
