@@ -40,6 +40,45 @@ public class AutoFactory {
         return Pair.of(Field.getFarLeftStartingPose(alliance), IDLE);
     }
 
+    Pair<Pose2d, Command> createIKLJAuto() {
+
+        var initialPose = Field.getLeftStartingPose(alliance);
+
+        return Pair.of(
+            initialPose, 
+            Commands.sequence(
+                followThenScore(
+                    ReefConstants.ReefFaces.IJ, 
+                    Superstructure.WantedSuperState.SCORE_LEFT_L4,
+                    Units.inchesToMeters(24),
+                    Units.feetToMeters(8.0)
+                    ),
+                followThenIntakeFromStation(
+                    Field.getLeftStationPickup(), 
+                    Units.feetToMeters(8.0)
+                    ),
+                followThenScore(
+                    ReefConstants.ReefFaces.KL, 
+                    Superstructure.WantedSuperState.SCORE_LEFT_L4,
+                    Units.inchesToMeters(24),
+                    Units.feetToMeters(8.0)
+                    ),
+                followThenIntakeFromStation(
+                    Field.getLeftStationPickup(), 
+                    Units.feetToMeters(8.0)
+                    ),
+                followThenScore(
+                    ReefConstants.ReefFaces.KL, 
+                    Superstructure.WantedSuperState.SCORE_RIGHT_L4,
+                    Units.inchesToMeters(24),
+                    Units.feetToMeters(8.0)
+                    ),
+                setState(Superstructure.WantedSuperState.DEFAULT_STATE)
+            ));
+    }
+
+ 
+
 
     // Auto Factory handlers
 
