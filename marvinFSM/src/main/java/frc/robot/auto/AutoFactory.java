@@ -5,13 +5,17 @@ import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.ReefConstants;
 import frc.robot.constants.Constants.SuperstructureConstants;
 import frc.robot.constants.Field;
 import frc.robot.subsystems.Superstructure;
@@ -72,6 +76,68 @@ public class AutoFactory {
                 .andThen(new WaitUntilCommand(
                         () -> robotContainer.getSwerveSubsystem().isAtDriveToPointSetpoint()));
     } 
+
+    private Command followThenScore(
+        ReefConstants.ReefFaces reefFaces,
+        Superstructure.WantedSuperState scoreState,
+        double distanceFromEndOfPathToStartElevation,
+        double maxVelocity) {
+            var desiredPose = getAutoScoringPose(reefFaces, scoreState);
+            return ((driveToPoint(desiredPose, maxVelocity))
+            .alongWith(new WaitUntilCommand(   
+                () -> robotContainer.getSwerveSubsystem().getDistanceFromDriveToPointSetpoint() < distanceFromEndOfPathToStartElevation)
+                ).andThen(setState(scoreState)))
+            .andThen(waitForCoralRelease().raceWith(new WaitCommand(1.0)));
+    }
+
+    private Command followThenScore(
+            Constants.ReefConstants.ReefFaces reefFaces, Superstructure.WantedSuperState scoreState) {
+        var desiredPose = getAutoScoringPose(reefFaces, scoreState);
+        return ((driveToPoint(desiredPose, Units.feetToMeters(12.0)).alongWith(setState(scoreState))))
+                .andThen(waitForCoralRelease().raceWith(new WaitCommand(1.0)));
+    }
+
+    private Command followThenScore(
+            Constants.ReefConstants.ReefFaces reefFaces,
+            Trajectory<SwerveSample> path,
+            Superstructure.WantedSuperState scoreState,
+            Superstructure.WantedSuperState noCoralState) {
+        return (followTrajectory(path)
+                        .andThen(new WaitUntilCommand(
+                                robotContainer.getSwerveSubsystem()::isAtEndOfChoreoTrajectoryOrDriveToPoint)))
+                .alongWith(new WaitUntilCommand(
+                                () -> robotContainer.getSwerveSubsystem().getRobotDistanceFromChoreoEndpoint()
+                                        < 2)
+                        .andThen(new ConditionalCommand(
+                                followThenScore(reefFaces, scoreState),
+                                setState(noCoralState),
+                                () -> robotContainer.getSuperstructure().hasCoral())));
+    }
+
+    private Command followThenScore(
+        ReefConstants.ReefFaces reefFaces,
+        Trajectory<SwerveSample> path,
+        Superstructure.WantedSuperState scoreState) {
+    var noCoralState = (scoreState == Superstructure.WantedSuperState.SCORE_LEFT_L4)
+            ? Superstructure.WantedSuperState.FORCE_RELOCALIZE
+            : Superstructure.WantedSuperState.FORCE_RELOCALIZE;
+    return followThenScore(reefFaces, path, scoreState, noCoralState);
+}
+
+    private Command followThenIntakeFromStation(Pose2d intakePose, double intakeVelocity) {
+        return (driveToPoint(intakePose, intakeVelocity)
+                        .alongWith(setState(Superstructure.WantedSuperState.INTAKE_CORAL_FROM_STATION))
+                        .andThen(Commands.waitSeconds(2.0)))
+                .raceWith(waitForCoralAcquisition());
+    }
+
+    private Command waitForCoralRelease() {
+        return new WaitUntilCommand(() -> !robotContainer.getSuperstructure().hasCoral());
+    }
+
+    private Command waitForCoralAcquisition() {
+        return new WaitUntilCommand(() -> robotContainer.getSuperstructure().hasCoral());
+    }
 
     public Pose2d getAutoScoringPose(
         Constants.ReefConstants.ReefFaces reefFaces, Superstructure.WantedSuperState superState) {
