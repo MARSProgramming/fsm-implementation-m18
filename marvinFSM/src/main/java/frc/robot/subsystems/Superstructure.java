@@ -32,6 +32,7 @@ public class Superstructure extends SubsystemBase {
     private final ElevatorSubsystem elevatorSubsystem;
 
     boolean coralSpitFlag = false;
+    boolean algaeModeActive = false;
 
    Constants.SuperstructureConstants.ScoringSide scoringSide = Constants.SuperstructureConstants.ScoringSide.LEFT;
    Constants.SuperstructureConstants.ScoringLevel scoringLevel = Constants.SuperstructureConstants.ScoringLevel.L1;
@@ -836,8 +837,8 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
                   setStateCommand(hasAlgaeCondition),
                   coralSubsystem::hasCoral),
                 setStateCommand(noPieceCondition),
-                () -> coralSubsystem.hasCoral() || algaeSubsystem.isHolding());
-          }
+                () -> coralSubsystem.hasCoral() || algaeModeActive);
+      }
 
 
 
@@ -848,6 +849,11 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
               ? Constants.SuperstructureConstants.ReefSelectionMethod.ROTATION
               : Constants.SuperstructureConstants.ReefSelectionMethod.POSE;
   }
+
+  public void toggleAlgaeMode() {
+   algaeModeActive = (algaeModeActive == false ? true : false);
+  }
+
 
   public void setDesiredReefLevelForDriveToPoint(Constants.SuperstructureConstants.ScoringLevel level) {
    scoringLevel = level;

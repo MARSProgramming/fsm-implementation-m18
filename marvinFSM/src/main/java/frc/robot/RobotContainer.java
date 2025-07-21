@@ -168,21 +168,22 @@ public class RobotContainer {
     controller
               .y()
               .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.PREP_CLIMB, // Force eject algae.
-                Superstructure.WantedSuperState.PREP_CLIMB, // Force eject algae.
-                Superstructure.WantedSuperState.PREP_CLIMB // Force eject algae.
+                Superstructure.WantedSuperState.PREP_CLIMB, // Prepare for climbing sequence.
+                Superstructure.WantedSuperState.PREP_CLIMB, // Prepare for climbing sequence.
+                Superstructure.WantedSuperState.PREP_CLIMB // Prepare for climbing sequence.
                 ))
                 .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
 
     controller
               .povUp()
-              .and(controller.povDown()) // we can accomplish this using paddles on a Pro controller or Gamesir G7.
+              .and(controller.povDown()) // This configuration makes it difficult to accidentally initiate a climb.
               .onTrue(superstructure.configureButtonBinding(
                 Superstructure.WantedSuperState.CLIMB, // Initiate climbing sequence.
                 Superstructure.WantedSuperState.CLIMB, // Initiate climbing sequence.
                 Superstructure.WantedSuperState.CLIMB // Initiate climbing sequence.
                 ))
                 .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
+    
 
 
 
