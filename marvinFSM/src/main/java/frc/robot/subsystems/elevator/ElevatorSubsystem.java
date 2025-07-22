@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.SubsystemDataProcessor;
 
-// TODO: add Timeout failsafe to elevator homing
 public class ElevatorSubsystem extends SubsystemBase {
     private final ElevatorIO elevatorIO;
     private final LimiterIO limitIO;
@@ -170,7 +169,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             }
 
             case IDLING -> {
-                limitIO.targetServoPosition(0);
+               //  limitIO.targetServoPosition(0); don't target this, after we climb servo should stay at 0.5
                 elevatorIO.applyVoltage(0);
                 break;
             }

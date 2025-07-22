@@ -484,8 +484,8 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
      }
 
      private void prepClimb() {
-      elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L2);
-      elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.OPEN_SERVO);
+       elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L2);
+      //elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.OPEN_SERVO);
      }
 
      private void intakeAlgaeFromReefGround() {
@@ -697,6 +697,7 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
    }
 
    private void climb() {
+
          elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.CLIMB);
          // disable all unnecessary subsystems
          coralSubsystem.setWantedState(CoralSubsystem.WantedState.IDLE);
@@ -827,18 +828,19 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
       return true;
      }
 
-      public Command configureButtonBinding(
-            WantedSuperState hasCoralCondition,
-            WantedSuperState hasAlgaeCondition,
-            WantedSuperState noPieceCondition) {
-           return Commands.either(
-                Commands.either(
-                  setStateCommand(hasCoralCondition),
-                  setStateCommand(hasAlgaeCondition),
-                  coralSubsystem::hasCoral),
-                setStateCommand(noPieceCondition),
-                () -> coralSubsystem.hasCoral() || algaeModeActive);
+     public Command configureButtonBinding(
+      WantedSuperState hasCoralCondition,
+      WantedSuperState hasAlgaeCondition,
+      WantedSuperState noPieceCondition) {
+    return Commands.either(
+        setStateCommand(hasAlgaeCondition),
+        Commands.either(
+            setStateCommand(hasCoralCondition),
+            setStateCommand(noPieceCondition),
+            coralSubsystem::hasCoral),
+        () -> algaeModeActive);
       }
+
 
 
 
