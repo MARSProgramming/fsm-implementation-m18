@@ -6,8 +6,8 @@ This effort is intended to improve the robot’s autonomy, response time, and ta
 This project is part of a broader goal to bring more robust software engineering practices into our robot codebase. As we iterate and test this FSM model on Marvin 18, more features will be added.
 ## Current Control Scheme (v1, updated July 21st)
 
-<img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/ModeAlgae.png" alt="controller_scheme_algae" width="800">
-<img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/ModeCoral.png" alt="controller_scheme_coral" width="800">
+<img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/ModeCoral.png" alt="controller_scheme_algae" width="800">
+<img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/ModeAlgae.png" alt="controller_scheme_coral" width="800">
 <img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/ModeNoPiece.png" alt="controller_scheme_nopiece" width="800">
 
 ## Reef Side Labels for Auto (from 2910)
