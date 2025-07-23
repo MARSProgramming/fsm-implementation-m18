@@ -74,8 +74,8 @@ public class RobotContainer {
     controller
               .leftTrigger()
               .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.SCORE_LEFT_L2, // Move the elevator to LEFT L2 position and score depending on automation.
-                Superstructure.WantedSuperState.MOVE_ALGAE_TO_PROCESSOR_POSITION, // Moves the elevator to processor position if we have algae.
+                Superstructure.WantedSuperState.SCORE_LEFT_L3, // Move the elevator to LEFT L3 position and score depending on automation.
+                Superstructure.WantedSuperState.MOVE_ALGAE_TO_PROCESSOR_POSITION, // Prep algae for processor position.
                 Superstructure.WantedSuperState.INTAKE_ALGAE_FROM_REEF_GROUND // Moves the elevator to intaking algae from the ground.
                 ))
                 .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
@@ -83,110 +83,120 @@ public class RobotContainer {
     controller
               .rightTrigger()
               .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.SCORE_RIGHT_L2, // Move the elevator to RIGHT L2 position and score depending on automation.
-                Superstructure.WantedSuperState.SCORE_ALGAE_IN_PROCESSOR, // Process algae.
-                Superstructure.WantedSuperState.HOME // Home if we dont have a piece or are holding algae.
+                Superstructure.WantedSuperState.SCORE_RIGHT_L3, // Move the elevator to RIGHT L3 position and score depending on automation.
+                Superstructure.WantedSuperState.SCORE_ALGAE_IN_PROCESSOR, // Spit algae.
+                Superstructure.WantedSuperState.SCORE_ALGAE_IN_PROCESSOR // Spit algae.
                 ))
                 .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
 
     controller
               .leftBumper()
               .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.SCORE_LEFT_L4, // Move the elevator to a LEFT L4 position and score depending on automation.
-                Superstructure.WantedSuperState.HOLD_ALGAE, // Holds algae.
-                Superstructure.WantedSuperState.INTAKE_ALGAE_FROM_REEF_TOP // Moves the elevator to intaking algae from the top of reef. 
+                Superstructure.WantedSuperState.SCORE_LEFT_L2, // Move the elevator to RIGHT L2 position and score depending on automation.
+                Superstructure.WantedSuperState.INTAKE_ALGAE_FROM_REEF_TOP, // Intake Algae hoisted on L3 reef pegs.
+                Superstructure.WantedSuperState.HOLD_ALGAE // Switch to a lower Algae OutputPercent for holding.
                 ))
                 .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
 
     controller
               .rightBumper()
               .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.SCORE_RIGHT_L4, // Move the elevator to a RIGHT L4 position and score depending on automation.
-                Superstructure.WantedSuperState.HOLD_ALGAE, // Holds algae.
-                Superstructure.WantedSuperState.INTAKE_ALGAE_FROM_REEF_BOT // Align the drivetrain for intaking coral.
-                ))
-                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
-
-
-    controller
-              .leftTrigger()
-              .and(controller.povLeft())
-              .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.SCORE_LEFT_L3, // Move the elevator to a LEFT L3 position and score depending on automation.
-                Superstructure.WantedSuperState.HOLD_ALGAE, // Continues to hold algae.
-                Superstructure.WantedSuperState.HOME // Homes elevator if no pieces are detected.
-                ))
-                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
-
-    controller
-              .rightTrigger()
-              .and(controller.povRight())
-              .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.SCORE_RIGHT_L3, // Move the elevator to a RIGHT L3 position and score depending on automation.
-                Superstructure.WantedSuperState.HOLD_ALGAE, // Continues to hold algae.
-                Superstructure.WantedSuperState.HOME // Homes elevator if no pieces are detected.
-                ))
-                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
-
-    controller
-              .x()
-              .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.MANUAL_L4, // Spits coral at any level manually. (allows for L1 scoring)
-                Superstructure.WantedSuperState.HOLD_ALGAE, // Continues to hold algae.
-                Superstructure.WantedSuperState.MANUAL_L4 // Spit coral at any level if sensor is not working.
-                ))
-                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
-
-    
-    controller
-              .b()
-              .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.SCORE_ALGAE_IN_PROCESSOR, // Force eject algae.
-                Superstructure.WantedSuperState.SCORE_ALGAE_IN_PROCESSOR, // Force eject algae.
-                Superstructure.WantedSuperState.SCORE_ALGAE_IN_PROCESSOR // Force eject algae.
-                ))
-                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
-
-    controller
-              .a()
-              .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.HOLD_ALGAE, // Force hold algae.
-                Superstructure.WantedSuperState.HOLD_ALGAE, // Force hold algae.
-                Superstructure.WantedSuperState.HOLD_ALGAE // Force hold algae.
-                ))
-                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
-
-    controller
-              .a()
-              .and(controller.povUp())
-              .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.FORCE_RELOCALIZE, // Force a relocalization of the drivetrain.
-                Superstructure.WantedSuperState.FORCE_RELOCALIZE, // Force a relocalization of the drivetrain.
-                Superstructure.WantedSuperState.FORCE_RELOCALIZE // Force a relocalization of the drivetrain.
+                Superstructure.WantedSuperState.SCORE_RIGHT_L2, // Move the elevator to RIGHT L2 position and score depending on automation.
+                Superstructure.WantedSuperState.INTAKE_ALGAE_FROM_REEF_BOT, // Intake Algae hoisted on L2 reef pegs.
+                Superstructure.WantedSuperState.INTAKE_CORAL_FROM_STATION // Align to intake coral from a station.
                 ))
                 .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
 
     controller
               .y()
               .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.PREP_CLIMB, // Prepare for climbing sequence.
-                Superstructure.WantedSuperState.PREP_CLIMB, // Prepare for climbing sequence.
-                Superstructure.WantedSuperState.PREP_CLIMB // Prepare for climbing sequence.
+                Superstructure.WantedSuperState.SCORE_ALGAE_IN_PROCESSOR, // Score/eject algae.
+                Superstructure.WantedSuperState.INTAKE_CORAL_FROM_STATION, // Intake coral.
+                Superstructure.WantedSuperState.INTAKE_ALGAE_FROM_REEF_TOP // Intake Algae hoisted on L3 reef pegs.
                 ))
                 .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
 
     controller
-              .povUp()
-              .and(controller.povDown()) // This configuration makes it difficult to accidentally initiate a climb.
+              .a()
               .onTrue(superstructure.configureButtonBinding(
-                Superstructure.WantedSuperState.CLIMB, // Initiate climbing sequence.
-                Superstructure.WantedSuperState.CLIMB, // Initiate climbing sequence.
-                Superstructure.WantedSuperState.CLIMB // Initiate climbing sequence.
+                Superstructure.WantedSuperState.MANUAL_L4, // Score/eject coral.
+                Superstructure.WantedSuperState.INTAKE_ALGAE_FROM_REEF_GROUND, // Intake Algae on ground.
+                Superstructure.WantedSuperState.INTAKE_ALGAE_FROM_REEF_BOT // Intake Algae hoisted on L2 reef pegs.
                 ))
                 .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
-    
 
 
+    controller
+              .x()
+              .onTrue(superstructure.configureButtonBinding(
+                Superstructure.WantedSuperState.SCORE_LEFT_L4, // Move the elevator to LEFT L4 position and score depending on automation.
+                Superstructure.WantedSuperState.SCORE_LEFT_L3, // If we have Algae, Minicycle on LEFT L3.
+                Superstructure.WantedSuperState.INTAKE_CORAL_FROM_STATION // (Placeholder for defense mode)
+                ))
+                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
+
+    controller
+              .b()
+              .onTrue(superstructure.configureButtonBinding(
+                Superstructure.WantedSuperState.SCORE_RIGHT_L4, // Move the elevator to RIGHT L4 position and score depending on automation.
+                Superstructure.WantedSuperState.SCORE_RIGHT_L3, // If we have Algae, Minicycle on RIGHT L3.
+                Superstructure.WantedSuperState.MANUAL_L4 // Score/eject coral.
+                ))
+                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
+
+      controller
+              .povUp()
+              .onTrue(superstructure.configureButtonBinding(
+                Superstructure.WantedSuperState.HOME, // Home elevator, stop algae motor, and revert coral motor to passive intaking.
+                Superstructure.WantedSuperState.HOME, // Home elevator, stop algae motor, and revert coral motor to passive intaking.
+                Superstructure.WantedSuperState.HOME // Home elevator, stop algae motor, and revert coral motor to passive intaking.
+                ))
+                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
+
+      controller
+              .povDown()
+              .onTrue(superstructure.configureButtonBinding(
+                Superstructure.WantedSuperState.HOLD_ALGAE, // Switch to a lower Algae OutputPercent for holding.
+                Superstructure.WantedSuperState.HOLD_ALGAE, // Switch to a lower Algae OutputPercent for holding.
+                Superstructure.WantedSuperState.HOLD_ALGAE // Switch to a lower Algae OutputPercent for holding.
+                ))
+                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
+
+      controller
+              .povRight()
+              .onTrue(superstructure.configureButtonBinding(
+                Superstructure.WantedSuperState.FORCE_RELOCALIZE, // Force the drivetrain to accept vision poses while held.
+                Superstructure.WantedSuperState.FORCE_RELOCALIZE, // Force the drivetrain to accept vision poses while held.
+                Superstructure.WantedSuperState.FORCE_RELOCALIZE // Force the drivetrain to accept vision poses while held.
+                ))
+                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
+
+      controller
+              .povLeft()
+              .onTrue(superstructure.configureButtonBinding(
+                Superstructure.WantedSuperState.FORCE_RELOCALIZE, // Force the drivetrain to accept vision poses while held.
+                Superstructure.WantedSuperState.FORCE_RELOCALIZE, // Force the drivetrain to accept vision poses while held.
+                Superstructure.WantedSuperState.FORCE_RELOCALIZE // Force the drivetrain to accept vision poses while held.
+                ))
+                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
+
+      controller
+              .start()
+              .onTrue(superstructure.configureButtonBinding(
+                Superstructure.WantedSuperState.CLIMB, // Open servo position for a lock and disable unecessary subsystems; then climb.
+                Superstructure.WantedSuperState.CLIMB, // Open servo position for a lock and disable unecessary subsystems; then climb.
+                Superstructure.WantedSuperState.CLIMB // Open servo position for a lock and disable unecessary subsystems; then climb.
+                ))
+                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
+
+      controller
+              .back()
+              .onTrue(superstructure.configureButtonBinding(
+                Superstructure.WantedSuperState.PREP_CLIMB, // Target L2 setpoint to allow cage entry.
+                Superstructure.WantedSuperState.PREP_CLIMB, // Target L2 setpoint to allow cage entry.
+                Superstructure.WantedSuperState.PREP_CLIMB // Target L2 setpoint to allow cage entry.
+                ))
+                .onFalse(superstructure.setStateCommand(Superstructure.WantedSuperState.DEFAULT_STATE));
 
   }
 

@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
 
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -832,14 +831,14 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
       WantedSuperState hasCoralCondition,
       WantedSuperState hasAlgaeCondition,
       WantedSuperState noPieceCondition) {
-    return Commands.either(
-        setStateCommand(hasAlgaeCondition),
+            return Commands.either(
+            setStateCommand(hasAlgaeCondition),
         Commands.either(
             setStateCommand(hasCoralCondition),
             setStateCommand(noPieceCondition),
             coralSubsystem::hasCoral),
         () -> algaeModeActive);
-      }
+         }
 
 
 

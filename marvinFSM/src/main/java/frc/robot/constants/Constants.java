@@ -82,21 +82,6 @@ public final class Constants {
             KL
         }
 
-        public enum AlgaeIntakeLocation {
-            L2,
-            L3
-        }
-
-        public static final class AlgaeIntakeMapping {
-            public final AlgaeIntakeLocation FRONT;
-            public final AlgaeIntakeLocation BACK;
-
-            public AlgaeIntakeMapping(AlgaeIntakeLocation front, AlgaeIntakeLocation back) {
-                FRONT = front;
-                BACK = back;
-            }
-        }
-
         public static final class ScoringCoralMappingRotationToTagID {
             public final int FRONT_ID;
             public final int BACK_ID;
@@ -151,34 +136,6 @@ public final class Constants {
                 Rotation2d.kZero,
                 new ScoringCoralMappingRotationToTagID(18, 21));
 
-        public static final Map<Rotation2d, AlgaeIntakeMapping> redAllianceAlgae = Map.of(
-                Rotation2d.fromDegrees(0),
-                new AlgaeIntakeMapping(AlgaeIntakeLocation.L2, AlgaeIntakeLocation.L3),
-                Rotation2d.fromDegrees(60),
-                new AlgaeIntakeMapping(AlgaeIntakeLocation.L3, AlgaeIntakeLocation.L2),
-                Rotation2d.fromDegrees(120),
-                new AlgaeIntakeMapping(AlgaeIntakeLocation.L2, AlgaeIntakeLocation.L3),
-                Rotation2d.fromDegrees(180),
-                new AlgaeIntakeMapping(AlgaeIntakeLocation.L3, AlgaeIntakeLocation.L2),
-                Rotation2d.fromDegrees(-120),
-                new AlgaeIntakeMapping(AlgaeIntakeLocation.L2, AlgaeIntakeLocation.L3),
-                Rotation2d.fromDegrees(-60),
-                new AlgaeIntakeMapping(AlgaeIntakeLocation.L3, AlgaeIntakeLocation.L2));
-
-        public static final Map<Rotation2d, AlgaeIntakeMapping> blueAllianceAlgae = Map.of(
-                Rotation2d.fromDegrees(0),
-                new AlgaeIntakeMapping(AlgaeIntakeLocation.L3, AlgaeIntakeLocation.L2),
-                Rotation2d.fromDegrees(60),
-                new AlgaeIntakeMapping(AlgaeIntakeLocation.L2, AlgaeIntakeLocation.L3),
-                Rotation2d.fromDegrees(120),
-                new AlgaeIntakeMapping(AlgaeIntakeLocation.L3, AlgaeIntakeLocation.L2),
-                Rotation2d.fromDegrees(180),
-                new AlgaeIntakeMapping(AlgaeIntakeLocation.L2, AlgaeIntakeLocation.L3),
-                Rotation2d.fromDegrees(-120),
-                new AlgaeIntakeMapping(AlgaeIntakeLocation.L3, AlgaeIntakeLocation.L2),
-                Rotation2d.fromDegrees(-60),
-                new AlgaeIntakeMapping(AlgaeIntakeLocation.L2, AlgaeIntakeLocation.L3));
-
         public static final Map<ReefFaces, Integer> redAllianceReefFacesToIds = Map.of(
                 ReefFaces.AB, 7,
                 ReefFaces.CD, 8,
@@ -215,11 +172,7 @@ public final class Constants {
 
   
     public static final class IntakeConstants {
-        public static final class CollectingVoltages {}
-
-        public static final class EjectingVoltages {}
-
-        public static final class CoralGunConstants {
+        public static final class CoralConstants {
             public static final double HOLDING_CORAL_PASSIVE_PERCENT = -0.2;
             public static final double IR_SENSOR_THRESHOLD = 1.8;
         }
