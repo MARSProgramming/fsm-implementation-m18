@@ -841,10 +841,6 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
          }
 
 
-
-
-
-
       public void toggleReefSelectionMethod() {
       reefSelectionMethod = (reefSelectionMethod == Constants.SuperstructureConstants.ReefSelectionMethod.POSE)
               ? Constants.SuperstructureConstants.ReefSelectionMethod.ROTATION

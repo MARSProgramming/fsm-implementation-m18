@@ -118,7 +118,6 @@ public class ElevatorSubsystem extends SubsystemBase {
                                 homedSafely = false;
                                 elevatorHomeTimestamp = Double.NaN;
                                 elevatorIO.resetPosition();
-
                                 setWantedState(WantedState.IDLE);
                                 return SystemState.IDLING;
                             }

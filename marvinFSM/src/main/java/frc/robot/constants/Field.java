@@ -57,7 +57,7 @@ public class Field {
     public static final Pose2d LEFT_STARTING_POSE_RED = new Pose2d(
             FIELD_LENGTH - LEFT_STARTING_POSE_BLUE.getX(),
             FIELD_HEIGHT - LEFT_STARTING_POSE_BLUE.getY(),
-            Rotation2d.fromDegrees(-135.0)); // todo red angles are wrong
+            Rotation2d.fromDegrees(-135.0)); 
     public static final Pose2d RIGHT_STARTING_POSE_BLUE = new Pose2d(
             LEFT_STARTING_POSE_BLUE.getX(),
             FIELD_HEIGHT - LEFT_STARTING_POSE_BLUE.getY(),
@@ -65,7 +65,7 @@ public class Field {
     public static final Pose2d RIGHT_STARTING_POSE_RED = new Pose2d(
             FIELD_LENGTH - RIGHT_STARTING_POSE_BLUE.getX(),
             FIELD_HEIGHT - RIGHT_STARTING_POSE_BLUE.getY(),
-            Rotation2d.fromDegrees(135.0)); // todo red angles are wrong
+            Rotation2d.fromDegrees(135.0)); 
 
     public static final Pose2d LEFT_STATION_PICKUP_POSE_BLUE = new Pose2d(0.6, 7.85, Rotation2d.fromDegrees(305));
 
