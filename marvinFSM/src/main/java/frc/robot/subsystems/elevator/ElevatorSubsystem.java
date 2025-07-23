@@ -108,6 +108,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                             if (limiterInputs.limit && elevatorInputs.elevPosition < 0.1) {
                                 isElevatorHomed = true;
                                 homedSafely = true;
+                                elevatorIO.resetPosition();
 
                                 elevatorHomeTimestamp = Double.NaN;
                                 setWantedState(WantedState.IDLE);
@@ -116,6 +117,8 @@ public class ElevatorSubsystem extends SubsystemBase {
                                 isElevatorHomed = true;
                                 homedSafely = false;
                                 elevatorHomeTimestamp = Double.NaN;
+                                elevatorIO.resetPosition();
+
                                 setWantedState(WantedState.IDLE);
                                 return SystemState.IDLING;
                             }
