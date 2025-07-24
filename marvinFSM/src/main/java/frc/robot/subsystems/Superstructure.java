@@ -395,7 +395,7 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
         coralSpitFlag = false;
         hasDriveToPointSetPointBeenSet = false;
 
-        elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.HOLD_POSITION);
+        elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L2);
 
         coralSubsystem.setWantedState(CoralSubsystem.WantedState.PASSIVE_INTAKE);
         algaeSubsystem.setWantedState(AlgaeSubsystem.WantedState.IDLE);
@@ -406,7 +406,7 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
      }
 
      private void holdingCoralAuto() {
-      elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.HOLD_POSITION);
+      elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L2);
       algaeSubsystem.setWantedState(AlgaeSubsystem.WantedState.IDLE);
       coralSubsystem.setWantedState(CoralSubsystem.WantedState.PASSIVE_INTAKE);
      }
@@ -484,6 +484,8 @@ private Constants.SuperstructureConstants.ReefSelectionMethod reefSelectionMetho
 
      private void prepClimb() {
        elevatorSubsystem.setDesiredElevatorSetpoint(Constants.ElevatorConstants.ELEVATOR_L2);
+       swerveSubsystem.setTeleopVelocityCoefficient(0.5); // reduce speed while held
+
       //elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.OPEN_SERVO);
      }
 
