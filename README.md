@@ -1,9 +1,13 @@
 # Finite State Machine Implementation of Marvin 18
+**7/28: No items in progress. After some thought, although an FSM will prove to effectively compartmentalize the robot and is supposed to make it easier to debug, because Command-based programming is inherently a state machine itself, this structure could prove to be redundant and not very necessary. Instead, the rest of my offseason efforts will be devoted to understanding how to write clean and effective command-based code. It worked well enough for us this season, but can easily work better in the next if we study proper implementations. For now, this was a good experience understanding how to write your own state machine infrastructure, and how Command-based programming actually works**
+
+
 This is an offseason project structured around the development of a Finite State Machine (FSM) architecture to manage complex robot behaviors in a structured and reliable way. Its intent is to use Marvin 18, a relatively simple robot, as a testbed for creating an FSM and improve our understanding of the model before the next FRC season.
 
 This effort is intended to improve the robot’s autonomy, response time, and task execution consistency by organizing actions into well-defined states and transitions. By clearly separating robot logic into manageable states (such as intake, alignment, scoring, and idle), the FSM allows for more maintainable and testable code while reducing the chances of unexpected behavior or “getting stuck” between commands. It intends to minimize delay and maximize computational efficiency of methods executed on the robot.
 
-This project is part of a broader goal to bring more robust software engineering practices into our robot codebase. As we iterate and test this FSM model on Marvin 18, more features will be added.
+This project is part of a broader goal to bring more robust software engineering practices into our robot codebase.
+
 ## Current Control Scheme (v2, updated July 23rd)
 
 <img src="https://github.com/MARSProgramming/fsm-implementation-m18/blob/main/marvinFSM/ModeCoral.png" alt="controller_scheme_algae" width="800">
@@ -35,6 +39,9 @@ This project is part of a broader goal to bring more robust software engineering
 - [X] Configure LoggedRobot structure 
 
 ## In-Progress 
+No items in progress
+
+## Planned
 - [ ] Implement testing controls
 - [ ] Implement v1 control scheme in RobotContainer
 - [ ] Implement all auto plays 
@@ -42,12 +49,9 @@ This project is part of a broader goal to bring more robust software engineering
     - Check for "stuck" states - if we enter a state, will the robot get stuck there despite callbacks.
     - Remove unecessary methods
     - Make code readable
-
 - *Considering*: Add Superstructure states that command the elevator to a setpoint, independent of autoalign. Failsafe for vision.
 - *Considering*: implement L1 scoring
 - *Considering*: Create an Elastic layout concept.
-
-## Planned
 - [ ] In-depth, comprehensive analysis of superstructure, susbystems, and how the state machine is implemented to ensure a reliable robot for testing
 - [ ] Real-world testing of system and PID tuning 
 - [ ] Tuning of autonomous functionality
